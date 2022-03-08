@@ -1,7 +1,7 @@
 <%-- 
-    Document   : index
-    Created on : Sep 21, 2021, 1:02:53 PM
-    Author     : fs148523
+    Document   : login
+    Created on : Mar 8, 2022, 2:00:37 PM
+    Author     : Samuel McClatchey
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,24 +9,24 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Java Project</title>
+        <title>Group Project - Login</title>
     </head>
+    <nav>
+        <ul>
+            <li><a href="login.jsp">Login</a></li>
+        </ul>
+    </nav>
     <body>
-        <h1>Social Media Fun Site Login!</h1>
-        <h1>${message}</h1>
-
-        <form action="private" method="post">
-            <input type="hidden" name="action" value="attemptLogin">
-            
-            <label>user name</label>
-            <input type="text" name="userName" value="">
-            <br>
-            
-            <label>password</label>
-            <input type="text" name="password" value="">
-            <br>
-
-            <input type="submit" value="submit">
+        <h1>Login</h1>
+        <form action="public" method="post">
+            <input type="hidden" name="action" value="login">
+            <label>Username:</label>
+            <input type="text" name="username" value="${username}">
+            <br><br>
+            <label>Password:</label>
+            <input type="text" name="password" value="${password}">
+            <p style="color:red">${loginError}</p>
+            <input type="submit" value="Login">
         </form>
     </body>
 </html>
