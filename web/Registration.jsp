@@ -9,10 +9,21 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="styles.css">
         <title>Registration Page</title>
     </head>
+    <h1>Group Project</h1>
+    <nav>
+        <ul>
+            <li><a href="index.jsp">Login</a></li>
+            <li><a href="Registration.jsp">Register</a></li>
+            <li><a href="profile.jsp">Profile</a></li>
+            <li><a href="users.jsp">All Users</a></li>
+        </ul>
+        <br>
+    </nav>
     <body>
-        <h1>Register for the Social Media Fun Site</h1>
+        <h2>Register for the Social Media Fun Site</h2>
         <form action="Controller" method="post">
             <input type="hidden" name="action" value="registerPerson">
             <label>Username:</label>

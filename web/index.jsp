@@ -9,15 +9,21 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Group Project - Login</title>
+        <link rel="stylesheet" href="styles.css">
+        <title>Group Project - Login</title
     </head>
+    <h1>Group Project</h1>
     <nav>
         <ul>
-            <li><a href="login.jsp">Login</a></li>
+            <li><a href="index.jsp">Login</a></li>
+            <li><a href="Registration.jsp">Register</a></li>
+            <li><a href="profile.jsp">Profile</a></li>
+            <li><a href="users.jsp">All Users</a></li>
         </ul>
+        <br>
     </nav>
     <body>
-        <h1>Login</h1>
+        <h2>Login</h2>
         <form action="public" method="post">
             <input type="hidden" name="action" value="login">
             <label>Username:</label>
