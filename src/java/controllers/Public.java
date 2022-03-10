@@ -95,9 +95,9 @@ public class Public extends HttpServlet {
                 
                 if(isValid == false) {
                     loginError = "*" + loginError;
+                    request.setAttribute("loginError", loginError);
                 }
-                
-                request.setAttribute("loginError", loginError);
+             
                 break;
             case "registerPerson":
                 errors = new ArrayList<String>();
