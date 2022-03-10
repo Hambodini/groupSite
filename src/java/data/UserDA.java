@@ -96,36 +96,6 @@ public class UserDA {
         }
     }
     
-    public static void delete(int id) throws SQLException {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        PreparedStatement ps = null;
-
-        String query
-                = "DELETE FROM `user`"
-                + "WHERE `user`.`id` = ?";
-        try {
-            ps = connection.prepareStatement(query);
-            //set all ? placeholders
-            ps.setInt(1, id);
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            //Log the exception and then throw it up to the servlet
-            LOG.log(Level.SEVERE, "*** delete has failed", e);
-            throw e;
-        } finally {
-            //Finally always happens, regardless of try/catch
-            try {
-                ps.close();
-                pool.freeConnection(connection);
-            } catch (Exception e) {
-                LOG.log(Level.SEVERE, "*** delete null pointer??", e);
-                throw e;
-            }
-        }
-    }
-    
     public static void update(String email, String password, int id) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -157,5 +127,37 @@ public class UserDA {
             }
         }
     }
+    
+    public static String getUsername (String username, String password) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "SELECT `username`, `password` FROM `user`"
+                + "WHERE `user`.`username` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setString(1, username);
+            ps.executeQuery();
+            return password;
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select username has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** username null pointer??", e);
+                throw e;
+            }
+        }
+    }
+    
+    
     
 }

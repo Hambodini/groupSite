@@ -24,5 +24,35 @@
     </nav>
     <body>
         <h2>All Users</h2>
+        
+        <ol>
+        <c:forEach items="${errors}" var="error">
+            <li>${error.key}: ${error.value}</li>
+        </c:forEach>
+        </ol>
+        
+        <table>
+
+        <tr>
+            <th>
+                Email
+            </th>
+            <th>
+                Username
+            </th>
+            
+        </tr>
+        <c:forEach items="${users}" var="user">
+            <tr>
+                <td>
+                    ${user.value.email}
+                </td>
+                <td>
+                    ${user.value.username}
+                </td>
+            </tr>
+
+        </c:forEach>  
+    </table>
     </body>
 </html>
