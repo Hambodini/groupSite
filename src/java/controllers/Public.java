@@ -58,76 +58,79 @@ public class Public extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "/index.jsp";
+        
+        ArrayList<String> errors = new ArrayList<String>();
+        String message = null;
 
         String action = request.getParameter("action");
-
         if (action == null) {
             action = "first";
         }
 
-        ArrayList<String> errors = new ArrayList<String>();
-        String message = null;
-        
-        if ("first".equals(action)) {
-        } else if ("registerPerson".equals(action)) {
-            errors = new ArrayList<String>();
+        switch(action) {
+            case "first":
+                break;
+            case "registerPerson":
+                errors = new ArrayList<String>();
 
-            String userNameRaw = request.getParameter("username");
-            request.setAttribute("userName", userNameRaw);
-            String emailRaw = request.getParameter("email");
-            request.setAttribute("email", emailRaw);
-            String passwordRaw = request.getParameter("password");
-            request.setAttribute("password", passwordRaw);
-            String birthDayRaw = request.getParameter("birthday");
-            request.setAttribute("birthDay", birthDayRaw);
+                String userNameRaw = request.getParameter("username");
+                request.setAttribute("userName", userNameRaw);
+                String emailRaw = request.getParameter("email");
+                request.setAttribute("email", emailRaw);
+                String passwordRaw = request.getParameter("password");
+                request.setAttribute("password", passwordRaw);
+                String birthDayRaw = request.getParameter("birthday");
+                request.setAttribute("birthDay", birthDayRaw);
 
-            if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
-                errors.add("Your username is long or too short");
-            }
-            
-            if (userNameExists()) {
-                errors.add("Your username already exists");
-            }
-
-            if (!emailRaw.contains("@") && !emailRaw.contains(".")) {
-                errors.add("Your email isnt in the right format");
-            }
-            
-            if (emailExists()) {
-                errors.add("Your email already exists");
-            }
-
-            if (passwordRaw.length() < 10) {
-                errors.add("Your password isnt long enough");
-            }
-
-            LocalDate today = LocalDate.now();
-            LocalDate birthDate = null;
-
-            try {
-                birthDate = LocalDate.parse(birthDayRaw);
-                
-                Period period = birthDate. until(today);
-                int yearsBetween = period. getYears();
-                
-                if (yearsBetween < 18) {
-                    errors.add("Your no old enough to make an account");
+                if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
+                    errors.add("Your username is long or too short");
                 }
-            } catch (Exception e) {
-                errors.add("Your birthdate isnt in the right format");
-            }
-
-            if (errors.isEmpty()) {
-                //add to db
-                message = "User added";
-            } else {
-                message = "User was not added";
-            }
             
-            request.setAttribute("message", message);
-            request.setAttribute("errors", errors);
-            url = "/Registration.jsp";
+                if (userNameExists()) {
+                    errors.add("Your username already exists");
+                }
 
+                if (!emailRaw.contains("@") && !emailRaw.contains(".")) {
+                    errors.add("Your email isnt in the right format");
+                }
+            
+                if (emailExists()) {
+                    errors.add("Your email already exists");
+                }
+
+                if (passwordRaw.length() < 10) {
+                    errors.add("Your password isnt long enough");
+                }
+
+                LocalDate today = LocalDate.now();
+                LocalDate birthDate = null;
+
+                try {
+                    birthDate = LocalDate.parse(birthDayRaw);
+                
+                    Period period = birthDate. until(today);
+                    int yearsBetween = period. getYears();
+                
+                    if (yearsBetween < 18) {
+                       errors.add("Your no old enough to make an account");
+                    }
+                } catch (Exception e) {
+                    errors.add("Your birthdate isnt in the right format");
+                }
+
+                if (errors.isEmpty()) {
+                    //add to db
+                 message = "User added";
+                } else {
+                    message = "User was not added";
+                }
+            
+                request.setAttribute("message", message);
+                request.setAttribute("errors", errors);
+                url = "/Registration.jsp";
+                break;
+            case "login":
+                break;
         }
 
         getServletContext().getRequestDispatcher(url).forward(request, response);
