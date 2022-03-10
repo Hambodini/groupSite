@@ -23,6 +23,27 @@
         <br>
     </nav>
     <body>
-        <h2>Profile</h2>
+        <h2>Your Profile</h2>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Email Address</th>
+                <th>Birthday</th>
+                <th>Edit</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <form action="Private" method="post">
+                            <input type="hidden" name="action" value="editProfile">
+                            <input type="submit" value="Edit">
+                    </form>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>
