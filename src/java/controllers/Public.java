@@ -70,6 +70,35 @@ public class Public extends HttpServlet {
         switch(action) {
             case "first":
                 break;
+            case "login":
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
+                String loginError = "";
+                boolean isValid = true;
+                
+                if ("".equals(username)) {
+                    loginError += "Username is a required field. ";
+                    isValid = false;
+                }
+                
+                if ("".equals(password)) {
+                    loginError += "Password is a required field. ";
+                    isValid = false;
+                }
+                
+                if (isValid == true) {
+                    //Search DB
+                    //IF user doesn't exist return error
+                    //IF user exists but invalid password return error
+                    //IF usename and passworrd correctr then login and goto profile
+                }
+                
+                if(isValid == false) {
+                    loginError = "*" + loginError;
+                }
+                
+                request.setAttribute("loginError", loginError);
+                break;
             case "registerPerson":
                 errors = new ArrayList<String>();
 
@@ -129,10 +158,8 @@ public class Public extends HttpServlet {
                 request.setAttribute("errors", errors);
                 url = "/Registration.jsp";
                 break;
-            case "login":
-                break;
-        }
-
+            }
+        
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
