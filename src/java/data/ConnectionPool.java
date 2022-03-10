@@ -17,7 +17,7 @@ public class ConnectionPool {
     private ConnectionPool() {
         try {
             InitialContext ic = new InitialContext();
-            dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/tacodb");
+            dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/userdb");
         } catch (NamingException e) {
            LOG.log(Level.SEVERE, "*** failed on datasource lookup", e);
         }
