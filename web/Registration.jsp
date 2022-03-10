@@ -29,14 +29,19 @@
             <label>Username:</label>
             <input type="text" name="username" value="">
             <br>
+            <br>
             <label>Email:</label>
             <input type="text" name="email" value="">
+            <br>
             <br>
             <label>Password:</label>
             <input type="text" name="password" value="">
             <br>
+            <br>
             <label>Birthday:</label>
             <input type="date" name="birthday">
+            <br>
+            <br>
             <input type="submit" value="Register">
         </form>
     </body>
