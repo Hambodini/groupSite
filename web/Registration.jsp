@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -24,20 +25,28 @@
     </nav>
     <body>
         <h2>Register for the Social Media Fun Site</h2>
-        <form action="Controller" method="post">
+        <form action="public" method="post">
             <input type="hidden" name="action" value="registerPerson">
             <label>Username:</label>
-            <input type="text" name="username" value="">
+            <input type="text" name="username" value="${userName}">
             <br>
             <label>Email:</label>
-            <input type="text" name="email" value="">
+            <input type="text" name="email" value="${email}">
             <br>
             <label>Password:</label>
-            <input type="text" name="password" value="">
+            <input type="text" name="password" value="${password}">
             <br>
             <label>Birthday:</label>
-            <input type="date" name="birthday">
+            <input type="date" name="birthday" value="${birthDay}">
             <input type="submit" value="Register">
+            <c:forEach var="error" items="${errors}">
+                <div>
+                    ${error}
+                </div>
+            </c:forEach>
+            <div>
+                ${message}
+            </div>
         </form>
     </body>
 </html>
