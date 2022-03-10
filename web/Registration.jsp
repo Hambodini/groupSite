@@ -30,14 +30,11 @@
             <label>Username:</label>
             <input type="text" name="username" value="${userName}">
             <br>
-            <br>
             <label>Email:</label>
             <input type="text" name="email" value="${email}">
             <br>
-            <br>
             <label>Password:</label>
             <input type="text" name="password" value="${password}">
-            <br>
             <br>
             <label>Birthday:</label>
             <input type="date" name="birthday" value="${birthDay}">
