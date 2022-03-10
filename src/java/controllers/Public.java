@@ -7,6 +7,11 @@ package controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +32,6 @@ public class Public extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -56,10 +59,80 @@ public class Public extends HttpServlet {
             throws ServletException, IOException {
         String url = "/index.jsp";
         
+        ArrayList<String> errors = new ArrayList<String>();
+        String message = null;
+
         String action = request.getParameter("action");
-        
-        
-        
+        if (action == null) {
+            action = "first";
+        }
+
+        switch(action) {
+            case "first":
+                break;
+            case "registerPerson":
+                errors = new ArrayList<String>();
+
+                String userNameRaw = request.getParameter("username");
+                request.setAttribute("userName", userNameRaw);
+                String emailRaw = request.getParameter("email");
+                request.setAttribute("email", emailRaw);
+                String passwordRaw = request.getParameter("password");
+                request.setAttribute("password", passwordRaw);
+                String birthDayRaw = request.getParameter("birthday");
+                request.setAttribute("birthDay", birthDayRaw);
+
+                if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
+                    errors.add("Your username is long or too short");
+                }
+            
+                if (userNameExists()) {
+                    errors.add("Your username already exists");
+                }
+
+                if (!emailRaw.contains("@") && !emailRaw.contains(".")) {
+                    errors.add("Your email isnt in the right format");
+                }
+            
+                if (emailExists()) {
+                    errors.add("Your email already exists");
+                }
+
+                if (passwordRaw.length() < 10) {
+                    errors.add("Your password isnt long enough");
+                }
+
+                LocalDate today = LocalDate.now();
+                LocalDate birthDate = null;
+
+                try {
+                    birthDate = LocalDate.parse(birthDayRaw);
+                
+                    Period period = birthDate. until(today);
+                    int yearsBetween = period. getYears();
+                
+                    if (yearsBetween < 18) {
+                       errors.add("Your no old enough to make an account");
+                    }
+                } catch (Exception e) {
+                    errors.add("Your birthdate isnt in the right format");
+                }
+
+                if (errors.isEmpty()) {
+                    //add to db
+                 message = "User added";
+                } else {
+                    message = "User was not added";
+                }
+            
+                request.setAttribute("message", message);
+                request.setAttribute("errors", errors);
+                url = "/Registration.jsp";
+                break;
+            case "login":
+                break;
+        }
+
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
@@ -72,5 +145,14 @@ public class Public extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean userNameExists() {
+            return false;
+        
+    }
+
+    private boolean emailExists() {
+        return false;
+    }
 
 }
