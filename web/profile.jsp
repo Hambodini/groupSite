@@ -25,14 +25,17 @@
     </nav>
     <body>
         <h2>Your Profile</h2>
-        <label>Username: </label>
-        <input type="text" name="username" value="${userName}" readonly><br><br>
-        <label>Password: </label>
-        <input type="text" name="password" value="${password}"><br><br>
-        <label>Email Address: </label>
-        <input type="text" name="email" value="${email}"><br><br>
-        <label>Birthday: </label>
-        <input type="date" name="birthday" value="${birthday}" readonly><br><br>
-        <input type="submit" value="Save"> 
+        <form action="private" method="post">
+            <input type="hidden" name="action" value="updateUser">
+            <label>Username: </label>
+            <input type="text" name="username" value="${user.getUsername}" readonly><br><br>
+            <label>Password: </label>
+            <input type="text" name="password" value="${user.getPassword}"><br><br>
+            <label>Email Address: </label>
+            <input type="text" name="email" value="${user.getEmail}"><br><br>
+            <label>Birthday: </label>
+            <input type="date" name="birthday" value="${user.getBirthday}" readonly><br><br>
+            <input type="submit" value="Save">
+        </form>
     </body>
 </html>

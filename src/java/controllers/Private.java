@@ -103,7 +103,7 @@ public class Private extends HttpServlet {
                     //logged in users
                     session.setAttribute("loggedInUser", userName);
                     message = "Login Sucesss";
-                    url = "/target.jsp";
+                    url = "/profile.jsp";
                 }
 
             }
@@ -111,11 +111,11 @@ public class Private extends HttpServlet {
             //You're already logged in!
 
             message = "You are still logged in";
-            url = "/target.jsp";
+            url = "/profile.jsp";
 
             //code for logged in only actions should happen here
             switch (action) {
-                case "doSomething": {
+                case "updateUser": {
 
                     break;
                 }
