@@ -88,14 +88,26 @@ public class Public extends HttpServlet {
                     isValid = false;
                 }
                 
-                if (isValid == true) {
-                    //Search DB
-                    //IF user doesn't exist return error
-                    //IF user exists but invalid password return error
-                    //IF usename and passworrd correctr then login and goto profile
+                try {
+                    if (isValid) {
+                        isValid = UserDA.userNameExists(username);
+                    
+                        if (isValid) {
+                            if (password == UserDA.getUserPassword(username)) {
+                                //login user
+                                url = "/profile.jsp";
+                            } else {
+                                loginError = "Password is not correct.";
+                            }
+                        } else {
+                            loginError = "User does not exist.";
+                        }
+                    }
+                } catch(SQLException e) {
+                    loginError = "SQL Exception, please try again.";
                 }
                 
-                if(isValid == false) {
+                if(!isValid) {
                     loginError = "*" + loginError;
                     request.setAttribute("loginError", loginError);
                 }
