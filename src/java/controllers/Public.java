@@ -105,6 +105,7 @@ public class Public extends HttpServlet {
                     }
                 } catch(SQLException e) {
                     loginError = "SQL Exception, please try again.";
+                    isValid = false;
                 }
                 
                 if(!isValid) {
