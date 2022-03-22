@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author joebe
  */
 public class UserDA {
-    
+
     private static final Logger LOG = Logger.getLogger(UserDA.class.getName());
 
     public static void insert(User user) throws SQLException {
@@ -66,7 +66,7 @@ public class UserDA {
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             User user = null;
-            
+
             LinkedHashMap<Integer, User> users = new LinkedHashMap();
 
             while (rs.next()) {
@@ -95,7 +95,7 @@ public class UserDA {
 
         }
     }
-    
+
     public static void update(String email, String password, int id) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -127,21 +127,21 @@ public class UserDA {
             }
         }
     }
-    
-    public static Boolean userNameExists (String username) throws SQLException {
+
+    public static Boolean userNameExists(String username) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         String query
-                = "SELECT `username`, `password` FROM `user`"
+                = "SELECT `username` FROM `user`"
                 + "WHERE `user`.`username` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 return true;
             } else {
@@ -162,21 +162,21 @@ public class UserDA {
             }
         }
     }
-    
-    public static Boolean emailExists (String username) throws SQLException {
+
+    public static Boolean emailExists(String email) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         String query
-                = "SELECT `username`, `password` FROM `user`"
-                + "WHERE `user`.`password` = ?";
+                = "SELECT `email` FROM `user`"
+                + "WHERE `user`.`email` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
-            ps.setString(1, username);
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 return true;
             } else {
@@ -197,8 +197,8 @@ public class UserDA {
             }
         }
     }
-    
-    public static String getUserPassword (String username) throws SQLException {
+
+    public static String getUserPassword(String username) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -211,7 +211,7 @@ public class UserDA {
             //set all ? placeholders
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-            
+
             return rs.getString("password");
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
@@ -228,7 +228,5 @@ public class UserDA {
             }
         }
     }
-    
-    
-    
+
 }
