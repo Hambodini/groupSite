@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,26 +25,14 @@
     </nav>
     <body>
         <h2>Your Profile</h2>
-        <table>
-            <tr>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Email Address</th>
-                <th>Birthday</th>
-                <th>Edit</th>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <form action="Private" method="post">
-                            <input type="hidden" name="action" value="editProfile">
-                            <input type="submit" value="Edit">
-                    </form>
-                </td>
-            </tr>
-        </table>
+        <label>Username: </label>
+        <input type="text" name="username" value="${userName}" readonly><br><br>
+        <label>Password: </label>
+        <input type="text" name="password" value="${password}"><br><br>
+        <label>Email Address: </label>
+        <input type="text" name="email" value="${email}"><br><br>
+        <label>Birthday: </label>
+        <input type="date" name="birthday" value="${birthday}" readonly><br><br>
+        <input type="submit" value="Save"> 
     </body>
 </html>
