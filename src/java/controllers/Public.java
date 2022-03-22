@@ -5,8 +5,10 @@
  */
 package controllers;
 
+import data.UserDA;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -95,9 +97,9 @@ public class Public extends HttpServlet {
                 
                 if(isValid == false) {
                     loginError = "*" + loginError;
+                    request.setAttribute("loginError", loginError);
                 }
-                
-                request.setAttribute("loginError", loginError);
+             
                 break;
             case "registerPerson":
                 errors = new ArrayList<String>();
@@ -115,7 +117,7 @@ public class Public extends HttpServlet {
                     errors.add("Your username is long or too short");
                 }
             
-                if (userNameExists()) {
+                if (userNameExists(userNameRaw)) {
                     errors.add("Your username already exists");
                 }
 
@@ -123,7 +125,7 @@ public class Public extends HttpServlet {
                     errors.add("Your email isnt in the right format");
                 }
             
-                if (emailExists()) {
+                if (emailExists(emailRaw)) {
                     errors.add("Your email already exists");
                 }
 
@@ -173,12 +175,18 @@ public class Public extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private boolean userNameExists() {
-            return false;
+    private boolean userNameExists(String userNameRaw) {
+        try {    
+        return UserDA.userNameExists(userNameRaw);
+        } catch (SQLException e) {}
+        return false;
         
     }
 
-    private boolean emailExists() {
+    private boolean emailExists(String emailRaw) {
+        try {    
+        return UserDA.emailExists(emailRaw);
+        } catch (SQLException e) {}
         return false;
     }
 
