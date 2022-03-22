@@ -128,7 +128,7 @@ public class UserDA {
         }
     }
     
-    public static String getUsername (String username) throws SQLException {
+    public static Boolean userNameExists (String username) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -140,8 +140,79 @@ public class UserDA {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
             ps.setString(1, username);
-            ps.executeQuery();
-            return username;
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select username has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** username null pointer??", e);
+                throw e;
+            }
+        }
+    }
+    
+    public static Boolean emailExists (String username) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "SELECT `username`, `password` FROM `user`"
+                + "WHERE `user`.`password` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select username has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** username null pointer??", e);
+                throw e;
+            }
+        }
+    }
+    
+    public static String getUserPassword (String username) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "SELECT `username`, `password` FROM `user`"
+                + "WHERE `user`.`username` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            
+            return rs.getString("password");
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
             LOG.log(Level.SEVERE, "*** select username has failed", e);
