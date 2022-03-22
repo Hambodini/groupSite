@@ -128,7 +128,7 @@ public class UserDA {
         }
     }
     
-    public static String getUsername (String username, String password) throws SQLException {
+    public static String getUsername (String username) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -141,7 +141,7 @@ public class UserDA {
             //set all ? placeholders
             ps.setString(1, username);
             ps.executeQuery();
-            return password;
+            return username;
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
             LOG.log(Level.SEVERE, "*** select username has failed", e);
