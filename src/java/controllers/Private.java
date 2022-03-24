@@ -116,7 +116,20 @@ public class Private extends HttpServlet {
             //code for logged in only actions should happen here
             switch (action) {
                 case "updateUser": {
-
+                    String newPassword = "";
+                    String newEmail = "";
+                    int id = 0;
+                    
+                    newPassword = request.getParameter("password");
+                    newEmail = request.getParameter("email");
+                    //id = user.getId;
+                    
+                    try {
+                        UserDA.update(newEmail, newPassword, id);
+                    } catch (Exception e) {
+                        
+                    }
+                    
                     break;
                 }
                 case "logoutUser": {

@@ -12,17 +12,27 @@ import java.time.LocalDate;
  * @author nosam
  */
 public class User implements Serializable {
+    private int id;
     private String username, email, password; 
     private LocalDate birthday;
 
     public User() {
     }
 
-    public User(String username, String email, String password, LocalDate birthday) {
+    public User(int id, String username, String email, String password, LocalDate birthday) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.birthday = birthday;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
