@@ -168,7 +168,7 @@ public class Public extends HttpServlet {
                 }
 
                 if (errors.isEmpty()) {
-                    User user = new User(emailRaw, userNameRaw, passwordRaw, birthDate);
+                    User user = new User(userNameRaw, emailRaw, passwordRaw, birthDate);
                 try {
                     UserDA.insert(user);
                 } catch (SQLException ex) {

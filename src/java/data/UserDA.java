@@ -134,8 +134,8 @@ public class UserDA {
         PreparedStatement ps = null;
 
         String query
-                = "SELECT `username` FROM `user`"
-                + "WHERE `user`.`username` = ?";
+                = "SELECT username FROM user"
+                + " WHERE username = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
@@ -173,11 +173,7 @@ public class UserDA {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                return true;
-            } else {
-                return false;
-            }
+            return rs.next();
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
             LOG.log(Level.SEVERE, "*** select username has failed", e);
@@ -207,8 +203,11 @@ public class UserDA {
             //set all ? placeholders
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-
-            return rs.getString("password");
+            String password = null;
+            if (rs.next()) {
+                password = rs.getString("password");
+            }
+            return password;
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
             LOG.log(Level.SEVERE, "*** select username has failed", e);
