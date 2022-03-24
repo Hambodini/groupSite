@@ -37,5 +37,9 @@
             <input type="date" name="birthday" value="${user.getBirthday}" readonly><br><br>
             <input type="submit" value="Save">
         </form>
+        <form action="private" method="post">
+            <input type="hidden" name="action" value="logoutUser">
+            <input type="submit" value="Log Out">       
+        </form>
     </body>
 </html>
