@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import business.User;
 import data.UserDA;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -93,11 +96,12 @@ public class Public extends HttpServlet {
                         isValid = UserDA.userNameExists(username);
                     
                         if (isValid) {
-                            if (password == UserDA.getUserPassword(username)) {
+                            String correctPassword = UserDA.getUserPassword(username);
+                            if (!password.equals(correctPassword)) {
+                                loginError = "Password is not correct.";
+                            } else {
                                 //login user
                                 url = "/profile.jsp";
-                            } else {
-                                loginError = "Password is not correct.";
                             }
                         } else {
                             loginError = "User does not exist.";
@@ -163,7 +167,11 @@ public class Public extends HttpServlet {
                 }
 
                 if (errors.isEmpty()) {
-                    //add to db
+                    User user = new User(emailRaw, userNameRaw, passwordRaw, birthDate);
+                try {
+                    UserDA.insert(user);
+                } catch (SQLException ex) {
+                }
                  message = "User added";
                 } else {
                     message = "User was not added";
@@ -192,6 +200,7 @@ public class Public extends HttpServlet {
         try {    
         return UserDA.userNameExists(userNameRaw);
         } catch (SQLException e) {}
+        catch (Exception e) {}
         return false;
         
     }

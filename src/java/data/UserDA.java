@@ -142,11 +142,7 @@ public class UserDA {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                return true;
-            } else {
-                return false;
-            }
+            return rs.next();
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
             LOG.log(Level.SEVERE, "*** select username has failed", e);
@@ -204,7 +200,7 @@ public class UserDA {
         PreparedStatement ps = null;
 
         String query
-                = "SELECT `username`, `password` FROM `user`"
+                = "SELECT `password` FROM `user`"
                 + "WHERE `user`.`username` = ?";
         try {
             ps = connection.prepareStatement(query);
