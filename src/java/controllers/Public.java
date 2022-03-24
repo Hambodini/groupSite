@@ -101,6 +101,7 @@ public class Public extends HttpServlet {
                                 loginError = "Password is not correct.";
                             } else {
                                 //login user
+                                
                                 url = "/profile.jsp";
                             }
                         } else {
