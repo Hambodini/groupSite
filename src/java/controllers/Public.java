@@ -108,7 +108,7 @@ public class Public extends HttpServlet {
                                 url = "/profile.jsp";
                                 User user = UserDA.getUserByUsername(username);
                                 session.setAttribute("loggedInUser", user.getUsername());
-                                request.setAttribute("user", user);
+                                session.setAttribute("user", user);
 
                             }
                         } else {

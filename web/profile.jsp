@@ -4,13 +4,15 @@
     Author     : Samuel McClatchey
 --%>
 
+<%@page import="data.UserDA"%>
 <%@page import="business.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     User user = (User) request.getAttribute("user");
+    String username = (String) session.getAttribute("loggedInUser");
     if (user == null) {
-        user = new User();
+        user = UserDA.getUserByUsername(username);
     }
 %>
 <!DOCTYPE html>

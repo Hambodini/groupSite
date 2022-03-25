@@ -14,7 +14,6 @@ import java.time.LocalDate;
 public class User implements Serializable {
     private int id = 0;
     private String username, email, password; 
-    private int id;
     private LocalDate birthday;
 
     public User() {
