@@ -104,6 +104,7 @@ public class Public extends HttpServlet {
                                 loginError = "Password is not correct.";
                             } else {
                                 //login user
+                                
                                 url = "/profile.jsp";
                                 User user = UserDA.getUserByUsername(username);
                                 session.setAttribute("loggedInUser", user.getUsername());
