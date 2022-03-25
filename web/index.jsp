@@ -27,11 +27,12 @@
         <form action="public" method="post">
             <input type="hidden" name="action" value="login">
             <label>Username:</label>
-            <input type="text" name="username" value="${username}">
+            <input type="text" name="username" value="${userName}">
             <br><br>
             <label>Password:</label>
             <input type="text" name="password" value="${password}">
-            <p style="color:red">${loginError}</p>
+            <p style="color:red">${loginError}</p
+            <p style="color:red">${message}</p>
             <input type="submit" value="Login">
         </form>
     </body>

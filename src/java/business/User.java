@@ -13,11 +13,20 @@ import java.time.LocalDate;
  */
 public class User implements Serializable {
     private String username, email, password; 
+    private int id;
     private LocalDate birthday;
 
     public User() {
     }
 
+    public User(String username, String email, String password, int id, LocalDate birthday) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.id = id;
+        this.birthday = birthday;
+    }
+    
     public User(String username, String email, String password, LocalDate birthday) {
         this.username = username;
         this.email = email;
@@ -56,6 +65,13 @@ public class User implements Serializable {
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
-    
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
 }

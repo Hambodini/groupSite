@@ -30,7 +30,7 @@ public class UserDA {
 
         String query
                 = "INSERT INTO `user` (`email`, `username`, `password`, `birthday`)"
-                + "VALUES (?, ?, ?, ?)";
+                + " VALUES (?, ?, ?, ?)";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
@@ -103,8 +103,8 @@ public class UserDA {
 
         String query
                 = "UPDATE `user`"
-                + "SET `email` = ?, `password` = ?"
-                + "WHERE `user`.`id` = ?";
+                + " SET `email` = ?, `password` = ?"
+                + " WHERE `user`.`id` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
@@ -166,7 +166,7 @@ public class UserDA {
 
         String query
                 = "SELECT `email` FROM `user`"
-                + "WHERE `user`.`email` = ?";
+                + " WHERE `user`.`email` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
@@ -197,7 +197,7 @@ public class UserDA {
 
         String query
                 = "SELECT `password` FROM `user`"
-                + "WHERE `user`.`username` = ?";
+                + " WHERE `user`.`username` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
@@ -223,5 +223,43 @@ public class UserDA {
             }
         }
     }
+    
+    public static User getUserByUsername(String userName) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
 
+        String query
+                = "SELECT * FROM `user`"
+                + " WHERE `user`.`username` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, userName);
+            ResultSet rs = ps.executeQuery();
+            User user = null;
+            
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                LocalDate birthday = rs.getDate("birthday").toLocalDate();
+
+                user = new User(username, email, password, id, birthday);
+            }
+            return user;
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, "*** select user by username sql", e);
+            throw e;
+        } finally {
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** select all null pointer??", e);
+                throw e;
+            }
+
+        }
+    }
 }

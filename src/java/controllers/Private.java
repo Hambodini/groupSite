@@ -73,6 +73,11 @@ public class Private extends HttpServlet {
 
         //check session to see if a user is logged in
         String loggedInUser = (String) session.getAttribute("loggedInUser");
+        User user = null;
+        try {
+            user = UserDA.getUserByUsername(loggedInUser);
+        } catch (SQLException ex) {
+        }
 
         if (loggedInUser == null || loggedInUser.equals("")) {
             //user is NOT logged in, set up a message and take them back to the index
@@ -119,21 +124,31 @@ public class Private extends HttpServlet {
                     String newPassword = "";
                     String newEmail = "";
                     int id = 0;
-                    
+
                     newPassword = request.getParameter("password");
                     newEmail = request.getParameter("email");
-                    //id = user.getId;
-                    
+                    id = user.getId();
+
                     try {
                         UserDA.update(newEmail, newPassword, id);
                     } catch (Exception e) {
-                        
+
                     }
                     
+                    message = "Profile update";
+                    String color = "green";
+                    request.setAttribute("color", color);
+
+                    user.setEmail(newEmail);
+                    user.setPassword(newPassword);
+                    request.setAttribute("user", user);
+
                     break;
                 }
                 case "logoutUser": {
                     url = "/index.jsp";
+                    session.removeAttribute("user");
+                    session.removeAttribute("loggedInUser");
                     break;
                 }
             }

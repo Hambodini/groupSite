@@ -8,7 +8,6 @@ package controllers;
 import business.User;
 import data.UserDA;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -16,11 +15,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -63,38 +62,42 @@ public class Public extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "/index.jsp";
-        
+
         ArrayList<String> errors = new ArrayList<String>();
         String message = null;
-
+        
         String action = request.getParameter("action");
         if (action == null) {
             action = "first";
         }
 
-        switch(action) {
+        HttpSession session = request.getSession();
+
+        switch (action) {
             case "first":
                 break;
             case "login":
                 String username = request.getParameter("username");
+                request.setAttribute("userName", username);
                 String password = request.getParameter("password");
+                request.setAttribute("password", password);
                 String loginError = "";
                 boolean isValid = true;
-                
+
                 if ("".equals(username)) {
                     loginError += "Username is a required field. ";
                     isValid = false;
                 }
-                
+
                 if ("".equals(password)) {
                     loginError += "Password is a required field. ";
                     isValid = false;
                 }
-                
+
                 try {
                     if (isValid) {
                         isValid = UserDA.userNameExists(username);
-                    
+
                         if (isValid) {
                             String correctPassword = UserDA.getUserPassword(username);
                             if (!password.equals(correctPassword)) {
@@ -102,21 +105,23 @@ public class Public extends HttpServlet {
                             } else {
                                 //login user
                                 url = "/profile.jsp";
+                                User user = UserDA.getUserByUsername(username);
+                                session.setAttribute("loggedInUser", user.getUsername());
+                                request.setAttribute("user", user);
+
                             }
                         } else {
                             loginError = "User does not exist.";
                         }
                     }
-                } catch(SQLException e) {
+                } catch (SQLException e) {
                     loginError = "SQL Exception, please try again.";
                     isValid = false;
                 }
-                
-                if(!isValid) {
-                    loginError = "*" + loginError;
-                    request.setAttribute("loginError", loginError);
-                }
-             
+
+                loginError = "*" + loginError;
+                request.setAttribute("loginError", loginError);
+
                 break;
             case "registerPerson":
                 errors = new ArrayList<String>();
@@ -133,7 +138,7 @@ public class Public extends HttpServlet {
                 if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
                     errors.add("Your username is long or too short");
                 }
-            
+
                 if (userNameExists(userNameRaw)) {
                     errors.add("Your username already exists");
                 }
@@ -141,7 +146,7 @@ public class Public extends HttpServlet {
                 if (!emailRaw.contains("@") && !emailRaw.contains(".")) {
                     errors.add("Your email isnt in the right format");
                 }
-            
+
                 if (emailExists(emailRaw)) {
                     errors.add("Your email already exists");
                 }
@@ -155,12 +160,12 @@ public class Public extends HttpServlet {
 
                 try {
                     birthDate = LocalDate.parse(birthDayRaw);
-                
-                    Period period = birthDate. until(today);
-                    int yearsBetween = period. getYears();
-                
+
+                    Period period = birthDate.until(today);
+                    int yearsBetween = period.getYears();
+
                     if (yearsBetween < 18) {
-                       errors.add("Your no old enough to make an account");
+                        errors.add("Your no old enough to make an account");
                     }
                 } catch (Exception e) {
                     errors.add("Your birthdate isnt in the right format");
@@ -168,21 +173,21 @@ public class Public extends HttpServlet {
 
                 if (errors.isEmpty()) {
                     User user = new User(userNameRaw, emailRaw, passwordRaw, birthDate);
-                try {
-                    UserDA.insert(user);
-                } catch (SQLException ex) {
-                }
-                 message = "User added";
+                    try {
+                        UserDA.insert(user);
+                    } catch (SQLException ex) {
+                    }
+                    message = "User added";
                 } else {
                     message = "User was not added";
                 }
-            
+
                 request.setAttribute("message", message);
                 request.setAttribute("errors", errors);
                 url = "/Registration.jsp";
                 break;
-            }
-        
+        }
+
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
@@ -197,18 +202,20 @@ public class Public extends HttpServlet {
     }// </editor-fold>
 
     private boolean userNameExists(String userNameRaw) {
-        try {    
-        return UserDA.userNameExists(userNameRaw);
-        } catch (SQLException e) {}
-        catch (Exception e) {}
+        try {
+            return UserDA.userNameExists(userNameRaw);
+        } catch (SQLException e) {
+        } catch (Exception e) {
+        }
         return false;
-        
+
     }
 
     private boolean emailExists(String emailRaw) {
-        try {    
-        return UserDA.emailExists(emailRaw);
-        } catch (SQLException e) {}
+        try {
+            return UserDA.emailExists(emailRaw);
+        } catch (SQLException e) {
+        }
         return false;
     }
 
