@@ -20,7 +20,7 @@
                 <li><a href="private?action=allUsers">All Users</a></li>
             </c:if>
             <li><a href="public?action=login">Login</a></li>
-            <li><a href="public?action=registerPerson">Register</a></li>
+            <li><a href="public?action=goToRegistration">Register</a></li>
         </ul>
         <br>
     </nav>

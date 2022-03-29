@@ -65,7 +65,7 @@ public class Public extends HttpServlet {
 
         ArrayList<String> errors = new ArrayList<String>();
         String message = null;
-        
+
         String action = request.getParameter("action");
         if (action == null) {
             action = "first";
@@ -75,6 +75,9 @@ public class Public extends HttpServlet {
 
         switch (action) {
             case "first":
+                break;
+            case "goToRegistration":
+                url="/Registration.jsp";
                 break;
             case "login":
                 String username = request.getParameter("username");
@@ -104,7 +107,7 @@ public class Public extends HttpServlet {
                                 loginError = "Password is not correct.";
                             } else {
                                 //login user
-                                
+
                                 url = "/profile.jsp";
                                 User user = UserDA.getUserByUsername(username);
                                 session.setAttribute("loggedInUser", user.getUsername());
