@@ -121,12 +121,12 @@ public class Private extends HttpServlet {
             //code for logged in only actions should happen here
             switch (action) {
                 case "profile": {
-                    url = "/index.jsp";
+                    url = "/profile.jsp";
                     request.setAttribute("user", user);
                 break;
                 }
                 case "allUsers": {
-                    
+                    url = "/users.jsp";
                     break;
                 }
                 case "updateUser": {

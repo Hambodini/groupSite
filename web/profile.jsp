@@ -33,13 +33,13 @@
         <form action="private" method="post">
             <input type="hidden" name="action" value="updateUser">
             <label>Username: </label>
-            <input type="text" name="username" value="${user.getUsername()}" readonly class="readonly"><br><br>
+            <input type="text" name="username" value="${user.username}" readonly class="readonly"><br><br>
             <label>Password: </label>
-            <input type="text" name="password" value="${user.getPassword()}"><br><br>
+            <input type="text" name="password" value="${user.password}"><br><br>
             <label>Email Address: </label>
-            <input type="text" name="email" value="${user.getEmail()}"><br><br>
+            <input type="text" name="email" value="${user.email}"><br><br>
             <label>Birthday: </label>
-            <input type="date" name="birthday" value="${user.getBirthday()}" readonly class="readonly"><br><br>
+            <input type="date" name="birthday" value="${user.birthday}" readonly class="readonly"><br><br>
             <input type="submit" value="Save">
         </form>
         <form action="private" method="post">
