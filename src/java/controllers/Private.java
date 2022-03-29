@@ -120,6 +120,15 @@ public class Private extends HttpServlet {
 
             //code for logged in only actions should happen here
             switch (action) {
+                case "profile": {
+                    url = "/index.jsp";
+                    request.setAttribute("user", user);
+                break;
+                }
+                case "allUsers": {
+                    
+                    break;
+                }
                 case "updateUser": {
                     String newPassword = "";
                     String newEmail = "";
@@ -132,7 +141,6 @@ public class Private extends HttpServlet {
                     try {
                         UserDA.update(newEmail, newPassword, id);
                     } catch (Exception e) {
-
                     }
                     
                     message = "Profile update";
@@ -147,7 +155,6 @@ public class Private extends HttpServlet {
                 }
                 case "logoutUser": {
                     url = "/index.jsp";
-                    session.removeAttribute("user");
                     session.removeAttribute("loggedInUser");
                     break;
                 }

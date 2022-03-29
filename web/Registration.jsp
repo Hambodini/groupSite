@@ -16,10 +16,12 @@
     <h1>Group Project</h1>
     <nav>
         <ul>
-            <li><a href="index.jsp">Login</a></li>
-            <li><a href="Registration.jsp">Register</a></li>
-            <li><a href="profile.jsp">Profile</a></li>
-            <li><a href="users.jsp">All Users</a></li>
+            <c:if test="${sessionScope.loggedInUser != null}">
+                <li><a href="private?action=profile">Profile</a></li>
+                <li><a href="private?action=allUsers">All Users</a></li>
+            </c:if>
+            <li><a href="public?action=login">Login</a></li>
+            <li><a href="public?action=registerPerson">Register</a></li>
         </ul>
         <br>
     </nav>
