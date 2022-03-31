@@ -21,3 +21,16 @@ nav a {
 .readonly {
     background-color: lightgrey;
 }
+
+tr, td {
+    padding: 5px;
+}
+
+.userMessage {
+    padding-top: 10px;
+    text-decoration: underline;
+}
+
+.errorMessage{
+    color: red;
+}

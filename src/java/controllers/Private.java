@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -62,6 +64,7 @@ public class Private extends HttpServlet {
             throws ServletException, IOException {
 
         String url = "/target.jsp";
+        ArrayList<String> errors = new ArrayList<String>();
         String message = "";
         String action = request.getParameter("action");
         //set an action value if there is none, to avoid null
@@ -93,9 +96,6 @@ public class Private extends HttpServlet {
                 //hard coded credential list / replace with call to DB to retrieve
                 //password stored for user.
                 HashMap<String, String> credentials = new HashMap();
-                credentials.put("bill", "apple is dumb");
-                credentials.put("timApple", "microsoft is dumb");
-                credentials.put("billy", "notpassword");
 
                 String passFromMap = credentials.get(userName);
 
@@ -123,33 +123,61 @@ public class Private extends HttpServlet {
                 case "profile": {
                     url = "/profile.jsp";
                     request.setAttribute("user", user);
-                break;
+                    break;
                 }
                 case "allUsers": {
                     url = "/users.jsp";
+                    LinkedHashMap<Integer, User> users = new LinkedHashMap();
+                    users = selectAll();
+                    request.setAttribute("users", users);
                     break;
                 }
                 case "updateUser": {
                     String newPassword = "";
                     String newEmail = "";
+                    errors = new ArrayList<String>();
+
                     int id = 0;
 
                     newPassword = request.getParameter("password");
                     newEmail = request.getParameter("email");
                     id = user.getId();
 
-                    try {
-                        UserDA.update(newEmail, newPassword, id);
-                    } catch (Exception e) {
+                    if (newPassword.length() < 10) {
+                        errors.add("Your password isn't long enough");
                     }
-                    
-                    message = "Profile update";
-                    String color = "green";
-                    request.setAttribute("color", color);
 
-                    user.setEmail(newEmail);
-                    user.setPassword(newPassword);
-                    request.setAttribute("user", user);
+                    if (!newEmail.contains("@") && !newEmail.contains(".")) {
+                        errors.add("Your email isn't in the right format.");
+                    }
+
+                    if (!newEmail.equalsIgnoreCase(user.getEmail())) {
+                        if (emailExists(newEmail)) {
+                            errors.add("That email already exists.");
+                        };
+                    }
+
+                    if (errors.isEmpty()) {
+                        try {
+                            UserDA.update(newEmail, newPassword, id);
+                            user.setEmail(newEmail);
+                            user.setPassword(newPassword);
+
+                            message = "Profile successfully updated!";
+                            String color = "green";
+                            request.setAttribute("color", color);
+
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        message = "Profile update failed, please try again.";
+                        String color = "red";
+                        request.setAttribute("color", color);
+
+                    }
+
+                    request.setAttribute("errors", errors);
+                            request.setAttribute("user", user);
 
                     break;
                 }
@@ -179,4 +207,20 @@ public class Private extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private LinkedHashMap<Integer, User> selectAll() {
+        try {
+            return UserDA.selectAll();
+        } catch (SQLException e) {
+        } catch (Exception e) {
+        }
+        return selectAll();
+    }
+
+    private boolean emailExists(String emailRaw) {
+        try {
+            return UserDA.emailExists(emailRaw);
+        } catch (SQLException e) {
+        }
+        return false;
+    }
 }

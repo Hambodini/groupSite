@@ -41,11 +41,18 @@
             <label>Birthday: </label>
             <input type="date" name="birthday" value="${user.birthday}" readonly class="readonly"><br><br>
             <input type="submit" value="Save">
+            <span style="color:${color}">${message}</span>
         </form>
         <form action="private" method="post">
             <input type="hidden" name="action" value="logoutUser">
+            <br>
             <input type="submit" value="Log Out">       
         </form>
-        <p style="color:${color}">${message}</p>
+            <br>
+            <c:forEach var="error" items="${errors}">
+                <div class="errorMessage">
+                    ${error}
+                </div>
+            </c:forEach>
     </body>
 </html>

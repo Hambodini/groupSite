@@ -88,7 +88,7 @@ public class Public extends HttpServlet {
                 boolean isValid = true;
 
                 if ("".equals(username)) {
-                    loginError += "Username is a required field. ";
+                    loginError += "Username is a required field. <br>";
                     isValid = false;
                 }
 
@@ -121,7 +121,6 @@ public class Public extends HttpServlet {
                     isValid = false;
                 }
 
-                loginError = "*" + loginError;
                 request.setAttribute("loginError", loginError);
 
                 break;
@@ -138,7 +137,7 @@ public class Public extends HttpServlet {
                 request.setAttribute("birthDay", birthDayRaw);
 
                 if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
-                    errors.add("Your username is long or too short");
+                    errors.add("Your username must be between 4 and 20 characters.");
                 }
 
                 if (userNameExists(userNameRaw)) {
@@ -146,15 +145,15 @@ public class Public extends HttpServlet {
                 }
 
                 if (!emailRaw.contains("@") && !emailRaw.contains(".")) {
-                    errors.add("Your email isnt in the right format");
+                    errors.add("Your email isn't in the right format.");
                 }
 
                 if (emailExists(emailRaw)) {
-                    errors.add("Your email already exists");
+                    errors.add("Your email already exists.");
                 }
 
                 if (passwordRaw.length() < 10) {
-                    errors.add("Your password isnt long enough");
+                    errors.add("Your password isn't long enough");
                 }
 
                 LocalDate today = LocalDate.now();
@@ -167,10 +166,10 @@ public class Public extends HttpServlet {
                     int yearsBetween = period.getYears();
 
                     if (yearsBetween < 18) {
-                        errors.add("Your no old enough to make an account");
+                        errors.add("Sorry, you are not old enough to make an account.");
                     }
                 } catch (Exception e) {
-                    errors.add("Your birthdate isnt in the right format");
+                    errors.add("Your birthdate isn't in the right format.");
                 }
 
                 if (errors.isEmpty()) {
@@ -179,9 +178,9 @@ public class Public extends HttpServlet {
                         UserDA.insert(user);
                     } catch (SQLException ex) {
                     }
-                    message = "User added";
+                    message = "User added!";
                 } else {
-                    message = "User was not added";
+                    message = "User was not added.";
                 }
 
                 request.setAttribute("message", message);

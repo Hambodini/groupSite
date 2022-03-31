@@ -46,14 +46,13 @@
             <br>
             <br>
             <input type="submit" value="Register">
+            <span class="userMessage">${message}</span>
+            <br><br>
             <c:forEach var="error" items="${errors}">
-                <div>
+                <div class="errorMessage">
                     ${error}
                 </div>
             </c:forEach>
-            <div>
-                ${message}
-            </div>
         </form>
     </body>
 </html>

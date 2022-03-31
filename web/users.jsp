@@ -4,18 +4,9 @@
     Author     : Samuel McClatchey
 --%>
 
-<%@page import="java.sql.SQLException"%>
-<%@page import="data.UserDA"%>
-<%@page import="java.util.LinkedHashMap"%>
-<%@page import="business.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    LinkedHashMap<Integer, User> users = null;
-    try {
-        users = UserDA.selectAll();
-    } catch (SQLException ex) {
-    }
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,10 +17,8 @@
     <h1>Group Project</h1>
     <nav>
         <ul>
-            <c:if test="${sessionScope.loggedInUser != null}">
                 <li><a href="private?action=profile">Profile</a></li>
                 <li><a href="private?action=allUsers">All Users</a></li>
-            </c:if>
             <li><a href="public?action=login">Login</a></li>
             <li><a href="public?action=goToRegistration">Register</a></li>
         </ul>
@@ -55,19 +44,17 @@
                 </th>
 
             </tr>
-            <c:if test="${sessionScope.loggedInUser != null}">
-                <c:forEach items="${users}" var="person">
+                <c:forEach items="${users}" var="user">
                     <tr>
                         <td>
-                            ${person.value.email}
+                            ${user.value.email}
                         </td>
                         <td>
-                            ${person.value.username}
+                            ${user.value.username}
                         </td>
                     </tr>
 
                 </c:forEach>  
-            </c:if>
         </table>
     </body>
 </html>
