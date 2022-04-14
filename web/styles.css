@@ -34,3 +34,15 @@ tr, td {
 .errorMessage{
     color: red;
 }
+
+th, td {
+  border: 1px solid;
+}
+
+tr:nth-child(even) {
+  background-color: gainsboro;
+}
+
+th {
+    background-color: silver;
+}
