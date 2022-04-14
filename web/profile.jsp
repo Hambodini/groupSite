@@ -49,7 +49,7 @@
             <input type="hidden" name="action" value="postToProfile">
             <label>Your Post: </label><br>
             <textarea id="postTextId" name="profilePostText" rows="4" cols="50">
-Your Post goes here!    
+Your Post goes here!
             </textarea>
             <input type="submit" value="Post">
         </form><br>
