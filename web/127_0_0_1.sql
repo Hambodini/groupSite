@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2022 at 09:08 PM
+-- Generation Time: Apr 14, 2022 at 09:20 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -20,6 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `userdb`
 --
+DROP DATABASE IF EXISTS `userdb`;
+CREATE DATABASE IF NOT EXISTS `userdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `userdb`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +30,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `comments`
 --
 
+DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `commentId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
@@ -49,6 +53,7 @@ INSERT INTO `comments` (`commentId`, `userId`, `commentText`, `postId`, `timeSta
 -- Table structure for table `posts`
 --
 
+DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
   `postId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
@@ -70,6 +75,7 @@ INSERT INTO `posts` (`postId`, `userId`, `title`, `postText`, `timeStamp`) VALUE
 -- Table structure for table `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(40) NOT NULL,
