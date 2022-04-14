@@ -42,7 +42,16 @@
             <input type="date" name="birthday" value="${user.birthday}" readonly class="readonly"><br><br>
             <input type="submit" value="Save">
             <span style="color:${color}">${message}</span>
-        </form>
+        </form><br>
+        
+        <h2>Post to your profile</h2>
+        <form action="private" method="post">
+            <input type="hidden" name="action" value="postToProfile">
+            <label>Your Post: </label>
+            <input type="text" name="userPostText" id="postTextId" maxlength="1024"><br><br>
+            <input type="submit" value="Post">
+        </form><br>
+        
         <form action="private" method="post">
             <input type="hidden" name="action" value="logoutUser">
             <br>
