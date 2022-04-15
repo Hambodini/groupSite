@@ -7,16 +7,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Author     : Samuel McClatchey
 */
 
-nav ul {
-    display: inline;
-    list-style-type: none;
+#nav li{
+  display: inline;
+  background-color:  #179cff;
 }
-nav li {
-    float: left;
+
+#nav li:hover{
+  background-color:  #17c0ff;
 }
-nav a {
-    display: block;
-    padding: .25em;
+
+#nav ul {
+  list-style-type: none;
+  background-color:  #ff6a17;
+  margin: 0;
+  padding: 0;
+}
+
+#nav ul li a{
+  text-align: center;
+  text-decoration: none;
 }
 .readonly {
     background-color: lightgrey;
