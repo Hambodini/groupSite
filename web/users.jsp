@@ -45,6 +45,13 @@
                         <td>
                             ${user.value.username}
                         </td>
+                        <td>
+                            <form action="private" method="post">
+                                <input type="hidden" name="action" value="viewOtherPersonsProfile">
+                                <input type="hidden" name="username" value="${user.value.username}">
+                                <input type="submit" value="View Profile">
+                            </form>
+                        </td>
                     </tr>
 
                 </c:forEach>  
