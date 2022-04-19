@@ -51,11 +51,10 @@
             <br>
             <c:forEach var="error" items="${errors}">
                 <div class="errorMessage">
-                    ${error}
+                    <c:out value="${error}" />
                 </div>
             </c:forEach>
         </div>
-
         <jsp:include page="footer.jsp"/>
     </body>
 </html>

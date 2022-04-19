@@ -15,7 +15,6 @@
     </head>
     <body>
         <jsp:include page="header.jsp" />
-
         <div>
             <h2>Register for the Social Media Fun Site</h2>
             <form action="public" method="post">
@@ -41,12 +40,11 @@
                 <br><br>
                 <c:forEach var="error" items="${errors}">
                     <div class="errorMessage">
-                        ${error}
+                        <c:out value="${error}" />
                     </div>
                 </c:forEach>
             </form>
         </div>
-
         <jsp:include page="footer.jsp"/>
     </body>
 </html>
