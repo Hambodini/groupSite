@@ -15,7 +15,6 @@
     </head>
     <body>
         <jsp:include page="header.jsp" />
-
         <div>
             <h2>Login</h2>
             <form action="public" method="post">
@@ -30,7 +29,6 @@
                 <input type="submit" value="Login">
             </form>
         </div>
-
         <jsp:include page="footer.jsp"/>
     </body>
 </html>
