@@ -10,7 +10,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -260,6 +262,107 @@ public class UserDA {
                 throw e;
             }
 
+        }
+    }
+
+    public static int getUserId(String username) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "SELECT `id` FROM `user`"
+                + " WHERE `user`.`username` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            int id = 0;
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+            return id;
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select id has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** id null pointer??", e);
+                throw e;
+            }
+        }
+    }
+    
+    public static void insertPost(int userId, String title, String postText, LocalDateTime timeStamp) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "INSERT INTO `posts` (`userId`, `title`, `postText`, `timeStamp`)"
+                + " VALUES (?, ?, ?, ?)";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setInt(1, userId);
+            ps.setString(2, title);
+            ps.setString(3, postText);
+            ps.setTimestamp(4, Timestamp.valueOf(timeStamp));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** Post insert has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** insert null pointer??", e);
+                throw e;
+            }
+        }
+    }
+    
+    public static int getUserPosts(int userId) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "SELECT TOP 5 FROM `posts`"
+                + " WHERE `userId` = ?"
+                + " ORDER BY 'timeStamp' ASC";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            int id = 0;
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+            return id;
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select id has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** id null pointer??", e);
+                throw e;
+            }
         }
     }
 }

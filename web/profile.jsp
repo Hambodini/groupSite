@@ -38,8 +38,12 @@
             <h2>Post to your profile</h2>
             <form action="private" method="post">
                 <input type="hidden" name="action" value="postToProfile">
+                <input type="hidden" name="postUsername" value="${user.username}">
                 <label>Your Post: </label><br>
-                <textarea id="postTextId" name="profilePostText" rows="4" cols="50">Your Post goes here!</textarea>
+                <label>Title: </label>
+                <input type="text" name="postTitle"><br>
+                <label>Body: </label>
+                <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea><br>
                 <input type="submit" value="Post">
             </form><br>
 

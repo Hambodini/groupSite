@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -180,6 +181,32 @@ public class Private extends HttpServlet {
                             request.setAttribute("user", user);
 
                     break;
+                }
+                case "postToProfile": {
+                    String postBody = request.getParameter("profilePostText");
+                    LocalDateTime postTimeStamp = LocalDateTime.now();
+                    String postUsername = request.getParameter("postUsername");
+                    String postTitle = request.getParameter("postTitle");
+                    int postUserId = -1;
+                    
+                    try {
+                        postUserId = UserDA.getUserId(postUsername);
+                    } catch (Exception e) {
+                        errors.add("getUserId error");
+                    }
+                    
+                    if ("".equals(postBody)) {
+                        errors.add("Your post cannot be blank");
+                    }
+                    
+                    if ("".equals(postTitle)) {
+                        errors.add("Your post title cannot be blank");
+                    }
+                    
+                    if (errors.isEmpty()) {
+                        
+                    }
+                    
                 }
                 case "logoutUser": {
                     url = "/index.jsp";
