@@ -76,7 +76,7 @@ public class UserDA {
                 String password = rs.getString("password");
                 LocalDate birthday = rs.getDate("birthday").toLocalDate();
 
-                user = new User(email, username, password, birthday);
+                user = new User(username, email, password, birthday);
                 users.put(id, user);
             }
             return users;
