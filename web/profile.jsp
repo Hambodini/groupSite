@@ -18,7 +18,6 @@
     </head>
     <body>
         <jsp:include page="header.jsp" />
-
         <div>
             <h2>Your Profile</h2>
             <form action="private" method="post">
@@ -34,7 +33,6 @@
                 <input type="submit" value="Save">
                 <span style="color:${color}">${message}</span>
             </form><br>
-
             <h2>Post to your profile</h2>
             <form action="private" method="post">
                 <input type="hidden" name="action" value="postToProfile">
@@ -42,7 +40,6 @@
                 <textarea id="postTextId" name="profilePostText" rows="4" cols="50">Your Post goes here!</textarea>
                 <input type="submit" value="Post">
             </form><br>
-
             <form action="private" method="post">
                 <input type="hidden" name="action" value="logoutUser">
                 <br>
