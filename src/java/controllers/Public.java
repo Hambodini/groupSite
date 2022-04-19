@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.catalina.realm.SecretKeyCredentialHandler;
 
 /**
  *
@@ -61,6 +62,8 @@ public class Public extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//         Logger LOG = Logger.getLogger(Public.class.getName());
+        
         String url = "/index.jsp";
 
         ArrayList<String> errors = new ArrayList<String>();
@@ -86,6 +89,21 @@ public class Public extends HttpServlet {
                 request.setAttribute("password", password);
                 String loginError = "";
                 boolean isValid = true;
+                
+//                SecretKeyCredentialHandler ch;
+//                String hash = "";
+//                
+//                try {
+//                    ch = new SecretKeyCredentialHandler();
+//                    ch.setAlgorithm("PBKDF2WithHmacSHA256");
+//                    ch.setKeyLength(256);
+//                    ch.setSaltLength(16);
+//                    ch.setIterations(4096);
+//
+//                    hash = ch.mutate(password);
+//                } catch (Exception ex) {
+//                    LOG.log(Level.SEVERE, null, ex);
+//                }
 
                 if ("".equals(username)) {
                     loginError += "Username is a required field. <br>";
@@ -135,6 +153,21 @@ public class Public extends HttpServlet {
                 request.setAttribute("password", passwordRaw);
                 String birthDayRaw = request.getParameter("birthday");
                 request.setAttribute("birthDay", birthDayRaw);
+                
+//                SecretKeyCredentialHandler ch;
+//                String hash = "";
+//                
+//                try {
+//                    ch = new SecretKeyCredentialHandler();
+//                    ch.setAlgorithm("PBKDF2WithHmacSHA256");
+//                    ch.setKeyLength(256);
+//                    ch.setSaltLength(16);
+//                    ch.setIterations(4096);
+//
+//                    hash = ch.mutate(password);
+//                } catch (Exception ex) {
+//                    LOG.log(Level.SEVERE, null, ex);
+//                }
 
                 if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
                     errors.add("Your username must be between 4 and 20 characters.");

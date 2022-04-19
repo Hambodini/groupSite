@@ -18,7 +18,6 @@
     </head>
     <body>
         <jsp:include page="header.jsp" />
-
         <div>
             <h2>Your Profile</h2>
             <form action="private" method="post">
@@ -26,15 +25,14 @@
                 <label>Username: </label>
                 <input type="text" name="username" value="${user.username}" readonly class="readonly"><br><br>
                 <label>Password: </label>
-                <input type="text" name="password" value="${user.password}" <c:if test="${sessionScope.loggedInUser != user.username}">readonly class="readonly"</c:if>><br><br>
+                <input type="text" name="password" value="${user.password}"><br><br>
                     <label>Email Address: </label>
-                    <input type="text" name="email" value="${user.email}" <c:if test="${sessionScope.loggedInUser != user.username}">readonly class="readonly"</c:if>><br><br>
+                    <input type="text" name="email" value="${user.email}"><br><br>
                     <label>Birthday: </label>
                     <input type="date" name="birthday" value="${user.birthday}" readonly class="readonly"><br><br>
                 <input type="submit" value="Save">
                 <span style="color:${color}">${message}</span>
             </form><br>
-
             <h2>Post to your profile</h2>
             <form action="private" method="post">
                 <input type="hidden" name="action" value="postToProfile">
@@ -46,7 +44,6 @@
                 <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea><br>
                 <input type="submit" value="Post">
             </form><br>
-
             <form action="private" method="post">
                 <input type="hidden" name="action" value="logoutUser">
                 <br>
@@ -55,11 +52,10 @@
             <br>
             <c:forEach var="error" items="${errors}">
                 <div class="errorMessage">
-                    ${error}
+                    <c:out value="${error}" />
                 </div>
             </c:forEach>
         </div>
-
         <jsp:include page="footer.jsp"/>
     </body>
 </html>

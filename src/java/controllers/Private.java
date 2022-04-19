@@ -177,9 +177,6 @@ public class Private extends HttpServlet {
 
                     }
 
-                    request.setAttribute("errors", errors);
-                            request.setAttribute("user", user);
-
                     break;
                 }
                 case "postToProfile": {
@@ -213,6 +210,16 @@ public class Private extends HttpServlet {
                     session.removeAttribute("loggedInUser");
                     break;
                 }
+                case "viewOtherPersonsProfile": {
+                    url = "/profileViewOnly.jsp";
+                    String username = (String) request.getParameter("username");
+                    try {
+                        user = UserDA.getUserByUsername(username);
+                    } catch (SQLException ex) {
+                    }
+
+                    break;
+                }
             }
 
         }
@@ -220,6 +227,8 @@ public class Private extends HttpServlet {
         //regardless of what happens put the message in the request and forward
         // to url
         request.setAttribute("message", message);
+        request.setAttribute("user", user);
+        request.setAttribute("errors", errors);
 
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
