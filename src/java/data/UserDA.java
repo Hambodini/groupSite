@@ -393,6 +393,7 @@ public class UserDA {
             //set all ? placeholders
             ps.setString(1, newPostTitle);
             ps.setString(2, newPostText);
+            ps.setInt(3, postId);
             ps.executeUpdate();
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet

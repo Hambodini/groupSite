@@ -252,7 +252,7 @@ public class Private extends HttpServlet {
                     LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
                     
                     String postIdString = request.getParameter("postIdString");
-                    String newTitle = request.getParameter("newTitle");
+                    String newTitle = request.getParameter("newPostTitle");
                     String newPostText = request.getParameter("newPostText");
                     int postId = -1;
                     
@@ -272,7 +272,7 @@ public class Private extends HttpServlet {
                     
                     if (errors.isEmpty()) {
                         try {
-                            UserDA.updatePost(newPostText, newPostText, postId);
+                            UserDA.updatePost(newTitle, newPostText, postId);
                         } catch (Exception e) {
                             errors.add("Update failed, try again later.");
                         }
