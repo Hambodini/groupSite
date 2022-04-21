@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import business.Posts;
 import business.User;
 import data.UserDA;
 import java.io.IOException;
@@ -124,6 +125,15 @@ public class Private extends HttpServlet {
                 case "profile": {
                     url = "/profile.jsp";
                     request.setAttribute("user", user);
+                    int postUserId = user.getId();
+                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
+          
+                    try {
+                        posts = UserDA.getUserPosts(postUserId);
+                    } catch (Exception e) {
+                        errors.add("User Post Fetching Error, please try again later.");
+                    }
+                    request.setAttribute("posts", posts);
                     break;
                 }
                 case "allUsers": {
@@ -201,6 +211,11 @@ public class Private extends HttpServlet {
                     }
                     
                     if (errors.isEmpty()) {
+                        try {
+                            UserDA.insertPost(postUserId, postTitle, postBody, postTimeStamp);
+                        } catch (Exception e) {
+                            errors.add("Something went wrong while posting, please try again later");
+                        }
                         
                     }
                     

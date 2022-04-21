@@ -4,6 +4,7 @@
  */
 package data;
 
+import business.Posts;
 import business.User;
 import java.sql.Connection;
 import java.sql.Date;
@@ -331,25 +332,37 @@ public class UserDA {
         }
     }
     
-    public static int getUserPosts(int userId) throws SQLException {
+    public static LinkedHashMap<Integer, Posts> getUserPosts(int userId) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
+        
+        Posts post = null;
+        LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
 
+        
         String query
-                = "SELECT TOP 5 FROM `posts`"
+                = "SELECT * FROM `posts`"
                 + " WHERE `userId` = ?"
-                + " ORDER BY 'timeStamp' ASC";
+                + " ORDER BY `timeStamp` DESC"
+                + " LIMIT 5";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
-            int id = 0;
-            if (rs.next()) {
-                id = rs.getInt("id");
+            
+            while (rs.next()) {
+                //id = rs.getInt("id");  
+                String title = rs.getString("title");
+                String postText = rs.getString("postText");
+                LocalDateTime timeStamp = rs.getTimestamp("timeStamp").toLocalDateTime();
+                int postId = rs.getInt("postId");
+
+                post = new Posts(title, postText, timeStamp);
+                posts.put(postId, post);
             }
-            return id;
+            return posts;
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
             LOG.log(Level.SEVERE, "*** select id has failed", e);

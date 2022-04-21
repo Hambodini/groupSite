@@ -44,6 +44,14 @@
                 <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea><br>
                 <input type="submit" value="Post">
             </form><br>
+            
+            <h2>Your Posts:</h2>
+            <c:forEach var="post" items="${posts}">
+                <h3>${post.value.title}</h3>
+                <p> ${post.value.timeStamp}</p><br>
+                <p>${post.value.postText}</p>
+            </c:forEach>
+            
             <form action="private" method="post">
                 <input type="hidden" name="action" value="logoutUser">
                 <br>
