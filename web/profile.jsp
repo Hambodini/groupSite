@@ -41,19 +41,38 @@
                 <label>Title: </label>
                 <input type="text" name="postTitle"><br>
                 <label>Body: </label>
-                <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea><br>
+                <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea>
+                <p><i><small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Character limit is 1024 for posts</small></i></p>
                 <input type="submit" value="Post">
             </form><br>
             
             <h2>Your Posts:</h2>
             
-            <form action="private" method="post">
-                <c:forEach var="post" items="${posts}">
-                    <h3>${post.value.title}</h3>
-                    <p> ${post.value.timeStamp}</p><br>
-                    <p>${post.value.postText}</p>
-                </c:forEach>
-            </form>
+            
+            <c:forEach var="post" items="${posts}">
+                <h3>${post.value.title}</h3>
+                <p> ${post.value.timeStamp}</p><br>
+                <p>${post.value.postText}</p>
+                <form action="private" method="post">
+                    <input type="hidden" name="action" value="updatePost">
+                    <input type="hidden" name="postId" value="${post.getKey()}">
+                    <input type="submit" value="Update Post">
+                </form>
+                <form action="private" method="post">
+                    <input type="hidden" name="action" value="deletePost">
+                    <input type="hidden" name="postId" value="${post.getKey()}">
+                    <input type="submit" value="Delete Post">
+                </form>
+                <h5>Comments:</h5>
+                <form action="private" method="post">
+                    <input type="hidden" name="action" value="commentPost">
+                    <input type="hidden" name="postId" value="${post.getKey()}">
+                    <label>Post a comment:</label><br>
+                    <textarea id="postTextId" name="profilePostText" rows="2" cols="50"></textarea><br>
+                    <input type="submit" value="Post Comment">
+                </form>
+            </c:forEach>
+
                 
             <form action="private" method="post">
                 <input type="hidden" name="action" value="logoutUser">
