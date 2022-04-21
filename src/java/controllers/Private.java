@@ -270,6 +270,26 @@ public class Private extends HttpServlet {
                     break;
                 }
                 case "deletePost": {
+                    String postIdString = request.getParameter("postId");
+                    int postId = -1;
+                    
+                    try {
+                         postId = Integer.parseInt(postIdString);
+                    } catch (Exception e) {
+                        errors.add("Invalid Post Id");
+                    }
+                    
+                    if (errors.isEmpty()) {
+                        try {
+                            UserDA.deletePost(postId);
+                        } catch (Exception e) {
+                            errors.add("Post deletion fail, please try again later.");
+                        }
+                        
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
+                        url = "/profile.jsp";
+                    }
                     break;
                 }
                 case "commentPost": {

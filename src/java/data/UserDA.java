@@ -410,4 +410,33 @@ public class UserDA {
             }
         }
     }
+    
+    public static void deletePost(int postId) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "DELETE FROM `posts`"
+                + " WHERE `postId` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setInt(1, postId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** delete posts has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** update null pointer??", e);
+                throw e;
+            }
+        }
+    }
 }
