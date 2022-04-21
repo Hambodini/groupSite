@@ -190,12 +190,16 @@ public class Private extends HttpServlet {
                     break;
                 }
                 case "postToProfile": {
+                    url = "/profile.jsp";
+                    request.setAttribute("user", user);
+                    int postUserId = user.getId();
+                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
+                    
+                    
                     String postBody = request.getParameter("profilePostText");
                     LocalDateTime postTimeStamp = LocalDateTime.now();
                     String postUsername = request.getParameter("postUsername");
                     String postTitle = request.getParameter("postTitle");
-                    int postUserId = -1;
-                    url = "/profile.jsp";
                     
                     try {
                         postUserId = UserDA.getUserId(postUsername);
@@ -221,16 +225,74 @@ public class Private extends HttpServlet {
                         } catch (Exception e) {
                             errors.add("Something went wrong while posting, please try again later");
                         }
+                        
+                        try {
+                            posts = UserDA.getUserPosts(postUserId);
+                        } catch (Exception e) {
+                            errors.add("User Post Fetching Error, please try again later.");
+                        }
+                    request.setAttribute("posts", posts);
                     }
+                    break;
+                }
+                case "requestUpdate": {
+                    String postIdString = request.getParameter("postId");
+                    String oldTitle = request.getParameter("oldTitle");
+                    String oldPostText = request.getParameter("oldPostText");
+                    
+                    request.setAttribute("oldTitle", oldTitle);
+                    request.setAttribute("oldPostText", oldPostText);
+                    request.setAttribute("postIdString", postIdString);
+                    url = "/updatePost.jsp";
+                    break;
                 }
                 case "updatePost": {
+                    request.setAttribute("user", user);
+                    int postUserId = user.getId();
+                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
                     
+                    String postIdString = request.getParameter("postIdString");
+                    String newTitle = request.getParameter("newTitle");
+                    String newPostText = request.getParameter("newPostText");
+                    int postId = -1;
+                    
+                    try {
+                        postId = Integer.parseInt(postIdString);
+                    } catch (Exception e) {
+                        errors.add("PostID error.");
+                    }
+                    
+                    if ("".equals(newTitle)) {
+                        errors.add("Title cannot be blank.");
+                    }
+                    
+                    if ("".equals(newPostText)) {
+                        errors.add("Post body cannot be blank.");
+                    }
+                    
+                    if (errors.isEmpty()) {
+                        try {
+                            UserDA.updatePost(newPostText, newPostText, postId);
+                        } catch (Exception e) {
+                            errors.add("Update failed, try again later.");
+                        }
+                        
+                        try {
+                            posts = UserDA.getUserPosts(postUserId);
+                        } catch (Exception e) {
+                            errors.add("User Post Fetching Error, please try again later.");
+                        }
+                    request.setAttribute("posts", posts);
+                        
+                        url = "/profile.jsp";
+                    }
+                    break;
                 }
                 case "deletePost": {
-                    
+                    break;
                 }
                 case "commentPost": {
-                    
+                    break;
                 }
                 case "logoutUser": {
                     url = "/index.jsp";

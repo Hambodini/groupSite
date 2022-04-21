@@ -54,8 +54,10 @@
                 <p> ${post.value.timeStamp}</p><br>
                 <p>${post.value.postText}</p>
                 <form action="private" method="post">
-                    <input type="hidden" name="action" value="updatePost">
+                    <input type="hidden" name="action" value="requestUpdate">
                     <input type="hidden" name="postId" value="${post.getKey()}">
+                    <input type="hidden" name="oldTitle" value="${post.value.title}">
+                    <input type="hidden" name="oldPostText" value="${post.value.postText}">
                     <input type="submit" value="Update Post">
                 </form>
                 <form action="private" method="post">
