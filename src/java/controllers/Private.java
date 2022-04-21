@@ -232,6 +232,17 @@ public class Private extends HttpServlet {
                         user = UserDA.getUserByUsername(username);
                     } catch (SQLException ex) {
                     }
+                    
+                    int postUserId = user.getId();
+                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
+          
+                    try {
+                        posts = UserDA.getUserPosts(postUserId);
+                    } catch (Exception e) {
+                        errors.add("User Post Fetching Error, please try again later.");
+                    }
+                    request.setAttribute("posts", posts);
+                    
 
                     break;
                 }

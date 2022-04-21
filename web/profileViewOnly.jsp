@@ -29,6 +29,14 @@
                 <label>Birthday: </label>
                 <input type="date" name="birthday" value="${user.birthday}" readonly class="readonly"><br><br>
             </form><br>
+            
+            <h2>Your Posts:</h2>
+            <c:forEach var="post" items="${posts}">
+                <h3>${post.value.title}</h3>
+                <p> ${post.value.timeStamp}</p><br>
+                <p>${post.value.postText}</p>
+            </c:forEach>
+            
             <c:forEach var="error" items="${errors}">
                 <div class="errorMessage">
                     ${error}
