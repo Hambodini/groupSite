@@ -195,6 +195,7 @@ public class Private extends HttpServlet {
                     String postUsername = request.getParameter("postUsername");
                     String postTitle = request.getParameter("postTitle");
                     int postUserId = -1;
+                    url = "/profile.jsp";
                     
                     try {
                         postUserId = UserDA.getUserId(postUsername);
@@ -210,15 +211,17 @@ public class Private extends HttpServlet {
                         errors.add("Your post title cannot be blank");
                     }
                     
+                    if (postBody.length() > 1024) {
+                        errors.add("Character limit is 1024");
+                    }
+                    
                     if (errors.isEmpty()) {
                         try {
                             UserDA.insertPost(postUserId, postTitle, postBody, postTimeStamp);
                         } catch (Exception e) {
                             errors.add("Something went wrong while posting, please try again later");
                         }
-                        
                     }
-                    
                 }
                 case "logoutUser": {
                     url = "/index.jsp";

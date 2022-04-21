@@ -41,7 +41,8 @@
                 <label>Title: </label>
                 <input type="text" name="postTitle"><br>
                 <label>Body: </label>
-                <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea><br>
+                <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea>
+                <p><i><small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Character limit is 1024 for posts</small></i></p>
                 <input type="submit" value="Post">
             </form><br>
             
