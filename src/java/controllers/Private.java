@@ -125,14 +125,7 @@ public class Private extends HttpServlet {
                 case "profile": {
                     url = "/profile.jsp";
                     request.setAttribute("user", user);
-                    int postUserId = user.getId();
-                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
-          
-                    try {
-                        posts = UserDA.getUserPosts(postUserId);
-                    } catch (Exception e) {
-                        errors.add("User Post Fetching Error, please try again later.");
-                    }
+                    LinkedHashMap<Integer, Posts> posts = popPosts(user);
                     request.setAttribute("posts", posts);
                     break;
                 }
@@ -191,9 +184,7 @@ public class Private extends HttpServlet {
                 }
                 case "postToProfile": {
                     url = "/profile.jsp";
-                    request.setAttribute("user", user);
                     int postUserId = user.getId();
-                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
                     
                     
                     String postBody = request.getParameter("profilePostText");
@@ -226,12 +217,8 @@ public class Private extends HttpServlet {
                             errors.add("Something went wrong while posting, please try again later");
                         }
                         
-                        try {
-                            posts = UserDA.getUserPosts(postUserId);
-                        } catch (Exception e) {
-                            errors.add("User Post Fetching Error, please try again later.");
-                        }
-                    request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
                     }
                     break;
                 }
@@ -249,7 +236,6 @@ public class Private extends HttpServlet {
                 case "updatePost": {
                     request.setAttribute("user", user);
                     int postUserId = user.getId();
-                    LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
                     
                     String postIdString = request.getParameter("postIdString");
                     String newTitle = request.getParameter("newTitle");
@@ -277,13 +263,8 @@ public class Private extends HttpServlet {
                             errors.add("Update failed, try again later.");
                         }
                         
-                        try {
-                            posts = UserDA.getUserPosts(postUserId);
-                        } catch (Exception e) {
-                            errors.add("User Post Fetching Error, please try again later.");
-                        }
-                    request.setAttribute("posts", posts);
-                        
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
                         url = "/profile.jsp";
                     }
                     break;
@@ -358,5 +339,16 @@ public class Private extends HttpServlet {
         } catch (SQLException e) {
         }
         return false;
+    }
+    
+    public static LinkedHashMap<Integer, Posts> popPosts(User user) {
+        int postUserId = user.getId();
+        LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
+          
+        try {
+            posts = UserDA.getUserPosts(postUserId);
+        } catch (Exception e) {}
+        
+        return posts;
     }
 }
