@@ -223,6 +223,15 @@ public class Private extends HttpServlet {
                         }
                     }
                 }
+                case "updatePost": {
+                    
+                }
+                case "deletePost": {
+                    
+                }
+                case "commentPost": {
+                    
+                }
                 case "logoutUser": {
                     url = "/index.jsp";
                     session.removeAttribute("loggedInUser");

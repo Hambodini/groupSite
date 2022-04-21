@@ -71,6 +71,7 @@
                     <textarea id="postTextId" name="profilePostText" rows="2" cols="50"></textarea><br>
                     <input type="submit" value="Post Comment">
                 </form>
+                    <br><br><br><br>
             </c:forEach>
 
                 
