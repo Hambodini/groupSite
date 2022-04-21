@@ -218,7 +218,7 @@ public class Private extends HttpServlet {
                         }
                         
                     }
-                    
+   
                 }
                 case "logoutUser": {
                     url = "/index.jsp";

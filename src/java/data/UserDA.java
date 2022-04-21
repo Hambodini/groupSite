@@ -107,7 +107,7 @@ public class UserDA {
         String query
                 = "UPDATE `user`"
                 + " SET `email` = ?, `password` = ?"
-                + " WHERE `user`.`id` = ?";
+                + " WHERE `id` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
