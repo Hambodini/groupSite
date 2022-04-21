@@ -38,17 +38,15 @@
                 <input type="hidden" name="action" value="postToProfile">
                 <input type="hidden" name="postUsername" value="${user.username}">
                 <label>Your Post: </label><br>
+                <br>
                 <label>Title: </label>
-                <input type="text" name="postTitle"><br>
+                <input type="text" name="postTitle"><br><br>
                 <label>Body: </label>
                 <textarea id="postTextId" name="profilePostText" rows="4" cols="50"></textarea>
                 <p><i><small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Character limit is 1024 for posts</small></i></p>
                 <input type="submit" value="Post">
             </form><br>
-            
             <h2>Your Posts:</h2>
-            
-            
             <c:forEach var="post" items="${posts}">
                 <div id="post">
                     <h3>${post.value.title}</h3>
@@ -77,8 +75,6 @@
                 </div>
                 <br>
             </c:forEach>
-
-                
             <form action="private" method="post">
                 <input type="hidden" name="action" value="logoutUser">
                 <br>
