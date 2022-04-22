@@ -68,3 +68,7 @@ th {
     margin: .5em;
     color: #b9bbbe;
 }
+
+#nav ul li a {
+    color: b9bbbe;
+}
