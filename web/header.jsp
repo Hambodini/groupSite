@@ -26,7 +26,6 @@
                 <li><a href="public?action=login">Login</a></li>
                 <li><a href="public?action=goToRegistration">Register</a></li>
             </ul>
-            <br>
         </div>
     </body>
 </html>
