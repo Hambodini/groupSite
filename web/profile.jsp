@@ -49,7 +49,7 @@
             <h2>Your Posts:</h2>
             <c:forEach var="post" items="${posts}">
                 <div id="post">
-                    <h3>${post.value.title}</h3>
+                    <h2>${post.value.title}</h2>
                     <p> ${post.value.timeStamp}</p>
                     <p>${post.value.postText}</p>
                     <form action="private" method="post">
@@ -64,7 +64,20 @@
                         <input type="hidden" name="postId" value="${post.getKey()}">
                         <input type="submit" value="Delete Post">
                     </form>
-                    <h5>Comments:</h5>
+                    <h3>Comments:</h3>
+                    <c:forEach var="comment" items="${comments}">
+                        <c:if test="${post.getKey() == comment.value.postId}">
+                            <h4>${comment.value.username}</h4>
+                            <p>${comment.value.timeStamp}</p>
+                            <p>${comment.value.commentText}</p>
+                            <form action="private" method="post">
+                                <input type="hidden" name="action" value="deleteProfileComment">
+                                <input type="hidden" name="commentId" value="${comment.getKey()}">
+                                <input type="submit" value="Delete Comment">
+                            </form>
+                            <br><br><br>
+                        </c:if>
+                    </c:forEach>    
                     <form action="private" method="post">
                         <input type="hidden" name="action" value="commentPost">
                         <input type="hidden" name="postId" value="${post.getKey()}">

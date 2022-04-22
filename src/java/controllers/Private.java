@@ -127,6 +127,8 @@ public class Private extends HttpServlet {
                     request.setAttribute("user", user);
                     LinkedHashMap<Integer, Posts> posts = popPosts(user);
                     request.setAttribute("posts", posts);
+                    LinkedHashMap<Integer, Posts> comments = popComments();
+                    request.setAttribute("comments", comments);
                     break;
                 }
                 case "allUsers": {
@@ -219,6 +221,8 @@ public class Private extends HttpServlet {
                         
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> comments = popComments();
+                        request.setAttribute("comments", comments);
                     }
                     break;
                 }
@@ -269,6 +273,8 @@ public class Private extends HttpServlet {
                         
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> comments = popComments();
+                        request.setAttribute("comments", comments);
                         url = "/profile.jsp";
                     }
                     break;
@@ -292,6 +298,8 @@ public class Private extends HttpServlet {
                         
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> comments = popComments();
+                        request.setAttribute("comments", comments);
                         url = "/profile.jsp";
                     }
                     break;
@@ -331,7 +339,38 @@ public class Private extends HttpServlet {
                         } catch (Exception e) {
                             errors.add("Something went wrong while posting comment, please try again later.");
                         }
+                        
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> comments = popComments();
+                        request.setAttribute("comments", comments);
                     }
+                    break;
+                }
+                case "deleteProfileComment": {
+                    String commentIdString = request.getParameter("commentId");
+                    int commentId = -1;
+                    
+                    try {
+                         commentId = Integer.parseInt(commentIdString);
+                    } catch (Exception e) {
+                        errors.add("Invalid Comment Id");
+                    }
+                    
+                    if (errors.isEmpty()) {
+                        try {
+                            UserDA.deleteComment(commentId);
+                        } catch (Exception e) {
+                            errors.add("Comment deletion fail, please try again later.");
+                        }
+                        
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> comments = popComments();
+                        request.setAttribute("comments", comments);
+                        url = "/profile.jsp";
+                    }
+                    
                     break;
                 }
                 case "logoutUser": {
@@ -406,8 +445,22 @@ public class Private extends HttpServlet {
           
         try {
             posts = UserDA.getUserPosts(postUserId);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            //errors.add("Error while fetching user posts, please try again later.");
+        }
         
         return posts;
+    }
+    
+    public static LinkedHashMap<Integer, Posts> popComments() {
+        LinkedHashMap<Integer, Posts> comments = new LinkedHashMap();
+           
+        try {
+            comments = UserDA.getAllComments();
+        } catch (Exception e) {
+            //errors.add("Error while fetching comments, please try again later");
+        }
+        
+        return comments;
     }
 }

@@ -472,4 +472,80 @@ public class UserDA {
             }
         }
     }
+    
+    public static LinkedHashMap<Integer, Posts> getAllComments() throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        
+        Posts post = null;
+        LinkedHashMap<Integer, Posts> comments = new LinkedHashMap();
+
+        
+        String query
+                = "SELECT * FROM `comments`"
+                + " ORDER BY `timeStamp` DESC";
+
+        try {
+            ps = connection.prepareStatement(query);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //id = rs.getInt("id");
+                int commentId = rs.getInt("commentId");
+                int userId = rs.getInt("userId");
+                String userName = rs.getString("username");
+                String commentText = rs.getString("commentText");
+                LocalDateTime timeStamp = rs.getTimestamp("timeStamp").toLocalDateTime();
+                int postId = rs.getInt("postId");
+
+                post = new Posts(userId, postId, userName, commentText, timeStamp);
+                comments.put(commentId, post);
+            }
+            return comments;
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select all comments has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** id null pointer??", e);
+                throw e;
+            }
+        }
+    }
+    
+    public static void deleteComment(int commentId) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "DELETE FROM `comments`"
+                + " WHERE `commentId` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setInt(1, commentId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** delete comment has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** update null pointer??", e);
+                throw e;
+            }
+        }
+    }
 }
