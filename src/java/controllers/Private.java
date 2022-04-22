@@ -347,6 +347,50 @@ public class Private extends HttpServlet {
                     }
                     break;
                 }
+                case "commentAllUserPost": {
+                    String postIdString = request.getParameter("postId");
+                    int postId = -1;    
+                    String userName = request.getParameter("userName");
+                    String commentText = request.getParameter("allUserCommentText");
+                    LocalDateTime commentTimeStamp = LocalDateTime.now();
+                    int userId = 1;
+                    Posts commentPost = null;
+                    loggedInUser = (String) session.getAttribute("loggedInUser");
+                    
+                    try {
+                         postId = Integer.parseInt(postIdString);
+                    } catch (Exception e) {
+                        errors.add("Invalid Post Id");
+                    }
+                    
+                    try {
+                        userId = UserDA.getUserId(userName);
+                    } catch (Exception e) {
+                        errors.add("Could not find User ID associated with this username");
+                    }
+                    
+                    if ("".equals(commentText)) {
+                        errors.add("Comment cannot be blank.");
+                    }
+                    
+                    if (commentText.length() > 140) {
+                        errors.add("Character limit is 140");
+                    }
+                    
+                    if (errors.isEmpty()) {
+                        try {
+                            UserDA.insertComment(userId, userName, commentText, postId, commentTimeStamp);
+                        } catch (Exception e) {
+                            errors.add("Something went wrong while posting comment, please try again later.");
+                        }
+                        
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
+                        LinkedHashMap<Integer, Posts> comments = popComments();
+                        request.setAttribute("comments", comments);
+                    }
+                    break;
+                }
                 case "deleteProfileComment": {
                     String commentIdString = request.getParameter("commentId");
                     int commentId = -1;
@@ -381,13 +425,18 @@ public class Private extends HttpServlet {
                 case "viewOtherPersonsProfile": {
                     url = "/profileViewOnly.jsp";
                     String username = (String) request.getParameter("username");
+                    User userVO = null;
                     try {
-                        user = UserDA.getUserByUsername(username);
+                        userVO = UserDA.getUserByUsername(username);
+                        
                     } catch (SQLException ex) {
                     }
                     
-                    int postUserId = user.getId();
+                    int postUserId = userVO.getId();
+                    String otherPersonUsername = userVO.getUsername();
+                    request.setAttribute("usernameVO", otherPersonUsername);
                     LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
+                    int commentUserId = user.getId();
           
                     try {
                         posts = UserDA.getUserPosts(postUserId);
@@ -395,6 +444,9 @@ public class Private extends HttpServlet {
                         errors.add("User Post Fetching Error, please try again later.");
                     }
                     request.setAttribute("posts", posts);
+                    LinkedHashMap<Integer, Posts> comments = popComments();
+                    request.setAttribute("comments", comments);
+                    request.setAttribute("commentUserId", commentUserId);
                     
 
                     break;
