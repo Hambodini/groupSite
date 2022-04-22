@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -177,7 +178,7 @@ public class Public extends HttpServlet {
                     errors.add("Your username already exists");
                 }
 
-                if (!emailRaw.contains("@") && !emailRaw.contains(".")) {
+                if (!emailRaw.contains("@") && !emailRaw.contains(".") || emailRaw.length() < 5) {
                     errors.add("Your email isn't in the right format.");
                 }
 
@@ -252,5 +253,5 @@ public class Public extends HttpServlet {
         }
         return false;
     }
-
+    
 }
