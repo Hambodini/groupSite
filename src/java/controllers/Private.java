@@ -256,6 +256,10 @@ public class Private extends HttpServlet {
                         errors.add("Post body cannot be blank.");
                     }
                     
+                    if (newPostText.length() > 1024) {
+                        errors.add("Character limit is 1024");
+                    }
+                    
                     if (errors.isEmpty()) {
                         try {
                             UserDA.updatePost(newTitle, newPostText, postId);
@@ -293,6 +297,41 @@ public class Private extends HttpServlet {
                     break;
                 }
                 case "commentPost": {
+                    String postIdString = request.getParameter("postId");
+                    int postId = -1;    
+                    String userName = request.getParameter("userName");
+                    String commentText = request.getParameter("profileCommentText");
+                    LocalDateTime commentTimeStamp = LocalDateTime.now();
+                    int userId = 1;
+                    Posts commentPost = null;
+                    
+                    try {
+                         postId = Integer.parseInt(postIdString);
+                    } catch (Exception e) {
+                        errors.add("Invalid Post Id");
+                    }
+                    
+                    try {
+                        userId = UserDA.getUserId(userName);
+                    } catch (Exception e) {
+                        errors.add("Could not find User ID associated with this username");
+                    }
+                    
+                    if ("".equals(commentText)) {
+                        errors.add("Comment cannot be blank.");
+                    }
+                    
+                    if (commentText.length() > 140) {
+                        errors.add("Character limit is 140");
+                    }
+                    
+                    if (errors.isEmpty()) {
+                        try {
+                            UserDA.insertComment(userId, userName, commentText, postId, commentTimeStamp);
+                        } catch (Exception e) {
+                            errors.add("Something went wrong while posting comment, please try again later.");
+                        }
+                    }
                     break;
                 }
                 case "logoutUser": {

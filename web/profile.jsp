@@ -68,8 +68,9 @@
                     <form action="private" method="post">
                         <input type="hidden" name="action" value="commentPost">
                         <input type="hidden" name="postId" value="${post.getKey()}">
+                        <input type="hidden" name="userName" value="${user.username}">
                         <label>Post a comment:</label><br>
-                        <textarea id="postTextId" name="profilePostText" rows="2" cols="50"></textarea><br>
+                        <textarea name="profileCommentText" rows="2" cols="50"></textarea><br>
                         <input type="submit" value="Post Comment">
                     </form>
                 </div>

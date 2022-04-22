@@ -13,15 +13,25 @@ import java.time.LocalDateTime;
  */
 public class Posts implements Serializable {
     private int postId, userId;
-    private String title, postText;
+    private String title, postText, username, commentText;
     private LocalDateTime timeStamp;
 
     public Posts() {
     }
     
+    // constructor for posts
     public Posts(String title, String postText, LocalDateTime timeStamp) {
         this.title = title;
         this.postText = postText;
+        this.timeStamp = timeStamp;
+    }
+    
+    // contructor for comments
+    public Posts(int userId, int postId, String username, String commentText, LocalDateTime timeStamp) {
+        this.userId = userId;
+        this.postId = postId;
+        this.username = username;
+        this.commentText = commentText;
         this.timeStamp = timeStamp;
     }
 
@@ -63,6 +73,22 @@ public class Posts implements Serializable {
 
     public void setTimeStamp(LocalDateTime timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getCommentText() {
+        return commentText;
+    }
+
+    public void setCommentText(String commentText) {
+        this.commentText = commentText;
     }
     
     

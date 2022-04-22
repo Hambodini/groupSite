@@ -439,4 +439,37 @@ public class UserDA {
             }
         }
     }
+    
+    public static void insertComment(int userId, String userName, String commentText, int postId, LocalDateTime commentTimeStamp) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "INSERT INTO `comments` (`userId`, `username`, `commentText`, `postId`, `timeStamp`)"
+                + " VALUES (?, ?, ?, ?, ?)";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setInt(1, userId);
+            ps.setString(2, userName);
+            ps.setString(3, commentText);
+            ps.setInt(4, postId);
+            ps.setTimestamp(5, Timestamp.valueOf(commentTimeStamp));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** Comment insert has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** insert null pointer??", e);
+                throw e;
+            }
+        }
+    }
 }
