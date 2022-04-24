@@ -13,12 +13,20 @@ import java.time.LocalDate;
  */
 public class User implements Serializable {
     private int id = 0;
-    private String username, email, password; 
+    private String username, email, password ,passwordHash; 
     private LocalDate birthday;
 
     public User() {
     }
 
+    public User(String username, String email, String password, String passwordHash, LocalDate birthday) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.passwordHash = passwordHash;
+        this.birthday = birthday;
+    }
+    
     public User(String username, String email, String password, int id, LocalDate birthday) {
         this.username = username;
         this.email = email;
@@ -80,6 +88,14 @@ public class User implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
     
 }

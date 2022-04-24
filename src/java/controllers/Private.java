@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.catalina.realm.SecretKeyCredentialHandler;
 
 /**
  *
@@ -68,6 +69,7 @@ public class Private extends HttpServlet {
         String url = "/target.jsp";
         ArrayList<String> errors = new ArrayList<String>();
         String message = "";
+        SecretKeyCredentialHandler ch = null;
         String action = request.getParameter("action");
         //set an action value if there is none, to avoid null
         if (action == null) {
@@ -149,6 +151,19 @@ public class Private extends HttpServlet {
                     newEmail = request.getParameter("email");
                     id = user.getId();
 
+                    String newHash = "";
+
+                    try {
+                        ch = new SecretKeyCredentialHandler();
+                        ch.setAlgorithm("PBKDF2WithHmacSHA256");
+                        ch.setKeyLength(256);
+                        ch.setSaltLength(16);
+                        ch.setIterations(4096);
+
+                        newHash = ch.mutate(newPassword);
+                    } catch (Exception ex) {
+                    }
+
                     if (newPassword.length() < 10) {
                         errors.add("Your password isn't long enough");
                     }
@@ -165,7 +180,7 @@ public class Private extends HttpServlet {
 
                     if (errors.isEmpty()) {
                         try {
-                            UserDA.update(newEmail, newPassword, id);
+                            UserDA.update(newEmail, newPassword, newHash, id);
                             user.setEmail(newEmail);
                             user.setPassword(newPassword);
 
@@ -174,12 +189,10 @@ public class Private extends HttpServlet {
                             request.setAttribute("color", color);
 
                         } catch (Exception e) {
+                            message = "Profile update failed, please try again.";
+                            String color = "red";
+                            request.setAttribute("color", color);
                         }
-                    } else {
-                        message = "Profile update failed, please try again.";
-                        String color = "red";
-                        request.setAttribute("color", color);
-
                     }
 
                     break;
@@ -187,38 +200,37 @@ public class Private extends HttpServlet {
                 case "postToProfile": {
                     url = "/profile.jsp";
                     int postUserId = user.getId();
-                    
-                    
+
                     String postBody = request.getParameter("profilePostText");
                     LocalDateTime postTimeStamp = LocalDateTime.now();
                     String postUsername = request.getParameter("postUsername");
                     String postTitle = request.getParameter("postTitle");
-                    
+
                     try {
                         postUserId = UserDA.getUserId(postUsername);
                     } catch (Exception e) {
                         errors.add("getUserId error");
                     }
-                    
+
                     if ("".equals(postBody)) {
                         errors.add("Your post cannot be blank");
                     }
-                    
+
                     if ("".equals(postTitle)) {
                         errors.add("Your post title cannot be blank");
                     }
-                    
+
                     if (postBody.length() > 1024) {
                         errors.add("Character limit is 1024");
                     }
-                    
+
                     if (errors.isEmpty()) {
                         try {
                             UserDA.insertPost(postUserId, postTitle, postBody, postTimeStamp);
                         } catch (Exception e) {
                             errors.add("Something went wrong while posting, please try again later");
                         }
-                        
+
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
@@ -230,7 +242,7 @@ public class Private extends HttpServlet {
                     String postIdString = request.getParameter("postId");
                     String oldTitle = request.getParameter("oldTitle");
                     String oldPostText = request.getParameter("oldPostText");
-                    
+
                     request.setAttribute("oldTitle", oldTitle);
                     request.setAttribute("oldPostText", oldPostText);
                     request.setAttribute("postIdString", postIdString);
@@ -240,37 +252,37 @@ public class Private extends HttpServlet {
                 case "updatePost": {
                     request.setAttribute("user", user);
                     int postUserId = user.getId();
-                    
+
                     String postIdString = request.getParameter("postIdString");
                     String newTitle = request.getParameter("newPostTitle");
                     String newPostText = request.getParameter("newPostText");
                     int postId = -1;
-                    
+
                     try {
                         postId = Integer.parseInt(postIdString);
                     } catch (Exception e) {
                         errors.add("PostID error.");
                     }
-                    
+
                     if ("".equals(newTitle)) {
                         errors.add("Title cannot be blank.");
                     }
-                    
+
                     if ("".equals(newPostText)) {
                         errors.add("Post body cannot be blank.");
                     }
-                    
+
                     if (newPostText.length() > 1024) {
                         errors.add("Character limit is 1024");
                     }
-                    
+
                     if (errors.isEmpty()) {
                         try {
                             UserDA.updatePost(newTitle, newPostText, postId);
                         } catch (Exception e) {
                             errors.add("Update failed, try again later.");
                         }
-                        
+
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
@@ -282,20 +294,20 @@ public class Private extends HttpServlet {
                 case "deletePost": {
                     String postIdString = request.getParameter("postId");
                     int postId = -1;
-                    
+
                     try {
-                         postId = Integer.parseInt(postIdString);
+                        postId = Integer.parseInt(postIdString);
                     } catch (Exception e) {
                         errors.add("Invalid Post Id");
                     }
-                    
+
                     if (errors.isEmpty()) {
                         try {
                             UserDA.deletePost(postId);
                         } catch (Exception e) {
                             errors.add("Post deletion fail, please try again later.");
                         }
-                        
+
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
@@ -306,40 +318,40 @@ public class Private extends HttpServlet {
                 }
                 case "commentPost": {
                     String postIdString = request.getParameter("postId");
-                    int postId = -1;    
+                    int postId = -1;
                     String userName = request.getParameter("userName");
                     String commentText = request.getParameter("profileCommentText");
                     LocalDateTime commentTimeStamp = LocalDateTime.now();
                     int userId = 1;
                     Posts commentPost = null;
-                    
+
                     try {
-                         postId = Integer.parseInt(postIdString);
+                        postId = Integer.parseInt(postIdString);
                     } catch (Exception e) {
                         errors.add("Invalid Post Id");
                     }
-                    
+
                     try {
                         userId = UserDA.getUserId(userName);
                     } catch (Exception e) {
                         errors.add("Could not find User ID associated with this username");
                     }
-                    
+
                     if ("".equals(commentText)) {
                         errors.add("Comment cannot be blank.");
                     }
-                    
+
                     if (commentText.length() > 140) {
                         errors.add("Character limit is 140");
                     }
-                    
+
                     if (errors.isEmpty()) {
                         try {
                             UserDA.insertComment(userId, userName, commentText, postId, commentTimeStamp);
                         } catch (Exception e) {
                             errors.add("Something went wrong while posting comment, please try again later.");
                         }
-                        
+
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
@@ -349,41 +361,41 @@ public class Private extends HttpServlet {
                 }
                 case "commentAllUserPost": {
                     String postIdString = request.getParameter("postId");
-                    int postId = -1;    
+                    int postId = -1;
                     String userName = request.getParameter("userName");
                     String commentText = request.getParameter("allUserCommentText");
                     LocalDateTime commentTimeStamp = LocalDateTime.now();
                     int userId = 1;
                     Posts commentPost = null;
                     loggedInUser = (String) session.getAttribute("loggedInUser");
-                    
+
                     try {
-                         postId = Integer.parseInt(postIdString);
+                        postId = Integer.parseInt(postIdString);
                     } catch (Exception e) {
                         errors.add("Invalid Post Id");
                     }
-                    
+
                     try {
                         userId = UserDA.getUserId(userName);
                     } catch (Exception e) {
                         errors.add("Could not find User ID associated with this username");
                     }
-                    
+
                     if ("".equals(commentText)) {
                         errors.add("Comment cannot be blank.");
                     }
-                    
+
                     if (commentText.length() > 140) {
                         errors.add("Character limit is 140");
                     }
-                    
+
                     if (errors.isEmpty()) {
                         try {
                             UserDA.insertComment(userId, userName, commentText, postId, commentTimeStamp);
                         } catch (Exception e) {
                             errors.add("Something went wrong while posting comment, please try again later.");
                         }
-                        
+
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
@@ -394,27 +406,27 @@ public class Private extends HttpServlet {
                 case "deleteProfileComment": {
                     String commentIdString = request.getParameter("commentId");
                     int commentId = -1;
-                    
+
                     try {
-                         commentId = Integer.parseInt(commentIdString);
+                        commentId = Integer.parseInt(commentIdString);
                     } catch (Exception e) {
                         errors.add("Invalid Comment Id");
                     }
-                    
+
                     if (errors.isEmpty()) {
                         try {
                             UserDA.deleteComment(commentId);
                         } catch (Exception e) {
                             errors.add("Comment deletion fail, please try again later.");
                         }
-                        
+
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
                         request.setAttribute("comments", comments);
                         url = "/profile.jsp";
                     }
-                    
+
                     break;
                 }
                 case "logoutUser": {
@@ -428,16 +440,16 @@ public class Private extends HttpServlet {
                     User userVO = null;
                     try {
                         userVO = UserDA.getUserByUsername(username);
-                        
+
                     } catch (SQLException ex) {
                     }
-                    
+
                     int postUserId = userVO.getId();
                     String otherPersonUsername = userVO.getUsername();
                     request.setAttribute("usernameVO", otherPersonUsername);
                     LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
                     int commentUserId = user.getId();
-          
+
                     try {
                         posts = UserDA.getUserPosts(postUserId);
                     } catch (Exception e) {
@@ -447,7 +459,6 @@ public class Private extends HttpServlet {
                     LinkedHashMap<Integer, Posts> comments = popComments();
                     request.setAttribute("comments", comments);
                     request.setAttribute("commentUserId", commentUserId);
-                    
 
                     break;
                 }
@@ -490,29 +501,29 @@ public class Private extends HttpServlet {
         }
         return false;
     }
-    
+
     public static LinkedHashMap<Integer, Posts> popPosts(User user) {
         int postUserId = user.getId();
         LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
-          
+
         try {
             posts = UserDA.getUserPosts(postUserId);
         } catch (Exception e) {
             //errors.add("Error while fetching user posts, please try again later.");
         }
-        
+
         return posts;
     }
-    
+
     public static LinkedHashMap<Integer, Posts> popComments() {
         LinkedHashMap<Integer, Posts> comments = new LinkedHashMap();
-           
+
         try {
             comments = UserDA.getAllComments();
         } catch (Exception e) {
             //errors.add("Error while fetching comments, please try again later");
         }
-        
+
         return comments;
     }
 }

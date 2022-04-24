@@ -64,7 +64,7 @@ public class Public extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //         Logger LOG = Logger.getLogger(Public.class.getName());
-        
+
         String url = "/index.jsp";
 
         ArrayList<String> errors = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class Public extends HttpServlet {
             case "first":
                 break;
             case "goToRegistration":
-                url="/Registration.jsp";
+                url = "/Registration.jsp";
                 break;
             case "login":
                 String username = request.getParameter("username");
@@ -90,21 +90,20 @@ public class Public extends HttpServlet {
                 request.setAttribute("password", password);
                 String loginError = "";
                 boolean isValid = true;
-                
-//                SecretKeyCredentialHandler ch;
-//                String hash = "";
-//                
-//                try {
-//                    ch = new SecretKeyCredentialHandler();
-//                    ch.setAlgorithm("PBKDF2WithHmacSHA256");
-//                    ch.setKeyLength(256);
-//                    ch.setSaltLength(16);
-//                    ch.setIterations(4096);
-//
-//                    hash = ch.mutate(password);
-//                } catch (Exception ex) {
-//                    LOG.log(Level.SEVERE, null, ex);
-//                }
+
+                String hash = "";
+                SecretKeyCredentialHandler ch = null;
+
+                try {
+                    ch = new SecretKeyCredentialHandler();
+                    ch.setAlgorithm("PBKDF2WithHmacSHA256");
+                    ch.setKeyLength(256);
+                    ch.setSaltLength(16);
+                    ch.setIterations(4096);
+
+                    hash = ch.mutate(password);
+                } catch (Exception ex) {
+                }
 
                 if ("".equals(username)) {
                     loginError += "Username is a required field. <br>";
@@ -121,8 +120,8 @@ public class Public extends HttpServlet {
                         isValid = UserDA.userNameExists(username);
 
                         if (isValid) {
-                            String correctPassword = UserDA.getUserPassword(username);
-                            if (!password.equals(correctPassword)) {
+                            String correctHash = UserDA.getUserHash(username);
+                            if (!ch.matches(password, correctHash)) {
                                 loginError = "Password is not correct.";
                             } else {
                                 //login user
@@ -154,21 +153,19 @@ public class Public extends HttpServlet {
                 request.setAttribute("password", passwordRaw);
                 String birthDayRaw = request.getParameter("birthday");
                 request.setAttribute("birthDay", birthDayRaw);
-                
-//                SecretKeyCredentialHandler ch;
-//                String hash = "";
-//                
-//                try {
-//                    ch = new SecretKeyCredentialHandler();
-//                    ch.setAlgorithm("PBKDF2WithHmacSHA256");
-//                    ch.setKeyLength(256);
-//                    ch.setSaltLength(16);
-//                    ch.setIterations(4096);
-//
-//                    hash = ch.mutate(password);
-//                } catch (Exception ex) {
-//                    LOG.log(Level.SEVERE, null, ex);
-//                }
+
+                hash = "";
+
+                try {
+                    ch = new SecretKeyCredentialHandler();
+                    ch.setAlgorithm("PBKDF2WithHmacSHA256");
+                    ch.setKeyLength(256);
+                    ch.setSaltLength(16);
+                    ch.setIterations(4096);
+
+                    hash = ch.mutate(passwordRaw);
+                } catch (Exception ex) {
+                }
 
                 if ("".equals(userNameRaw) || userNameRaw.length() < 4 || userNameRaw.length() > 20) {
                     errors.add("Your username must be between 4 and 20 characters.");
@@ -207,7 +204,7 @@ public class Public extends HttpServlet {
                 }
 
                 if (errors.isEmpty()) {
-                    User user = new User(userNameRaw, emailRaw, passwordRaw, birthDate);
+                    User user = new User(userNameRaw, emailRaw, passwordRaw, hash, birthDate);
                     try {
                         UserDA.insert(user);
                     } catch (SQLException ex) {
@@ -253,5 +250,5 @@ public class Public extends HttpServlet {
         }
         return false;
     }
-    
+
 }

@@ -32,15 +32,15 @@ public class UserDA {
         PreparedStatement ps = null;
 
         String query
-                = "INSERT INTO `user` (`email`, `username`, `password`, `birthday`)"
-                + " VALUES (?, ?, ?, ?)";
+                = "INSERT INTO `user` (`id`, `email`, `username`, `password`, `passwordHash`, `birthday`) VALUES (NULL, ?, ?, ?, ?, ?) ";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getUsername());
             ps.setString(3, user.getPassword());
-            ps.setDate(4, Date.valueOf(user.getBirthday()));
+            ps.setString(4, user.getPasswordHash());
+            ps.setDate(5, Date.valueOf(user.getBirthday()));
             ps.executeUpdate();
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
@@ -99,21 +99,22 @@ public class UserDA {
         }
     }
 
-    public static void update(String email, String password, int id) throws SQLException {
+    public static void update(String email, String password, String passwordHash, int id) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         String query
                 = "UPDATE `user`"
-                + " SET `email` = ?, `password` = ?"
+                + " SET `email` = ?, `password` = ?, `passwordHash` = ?"
                 + " WHERE `id` = ?";
         try {
             ps = connection.prepareStatement(query);
             //set all ? placeholders
             ps.setString(1, email);
             ps.setString(2, password);
-            ps.setInt(3, id);
+            ps.setString(3, passwordHash);
+            ps.setInt(4, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             //Log the exception and then throw it up to the servlet
@@ -545,6 +546,40 @@ public class UserDA {
                 pool.freeConnection(connection);
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "*** update null pointer??", e);
+                throw e;
+            }
+        }
+    }
+
+    public static String getUserHash(String username) throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "SELECT `passwordHash` FROM `user`"
+                + " WHERE `user`.`username` = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            //set all ? placeholders
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            String passwordHash = null;
+            if (rs.next()) {
+                passwordHash = rs.getString("passwordHash");
+            }
+            return passwordHash;
+        } catch (SQLException e) {
+            //Log the exception and then throw it up to the servlet
+            LOG.log(Level.SEVERE, "*** select username has failed", e);
+            throw e;
+        } finally {
+            //Finally always happens, regardless of try/catch
+            try {
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** username null pointer??", e);
                 throw e;
             }
         }
