@@ -231,6 +231,7 @@ public class UserDA {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
+        
 
         String query
                 = "SELECT * FROM `user`"
