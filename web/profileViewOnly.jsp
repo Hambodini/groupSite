@@ -42,7 +42,7 @@
                         <c:if test="${commentUserId == comment.value.userId}">
                             <form action="private" method="post">
                                 <input type="hidden" name="action" value="deleteProfileComment">
-                                <input type="hidden" name="Id" value="${comment.getKey()}">
+                                <input type="hidden" name="commentId" value="${comment.getKey()}">
                                 <input type="submit" value="Delete Comment">
                             </form>
                         </c:if>
