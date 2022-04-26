@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2022 at 11:06 AM
+-- Generation Time: Apr 26, 2022 at 08:23 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -51,6 +51,13 @@ CREATE TABLE `posts` (
   `postText` varchar(1024) NOT NULL,
   `timeStamp` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`postId`, `userId`, `title`, `postText`, `timeStamp`) VALUES
+(7, 5, 'ligma b', 'jjhklbkbbklbkjh', '2022-04-26 13:14:44');
 
 -- --------------------------------------------------------
 
@@ -112,7 +119,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user`
