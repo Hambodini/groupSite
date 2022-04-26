@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2022 at 08:23 PM
+-- Generation Time: Apr 26, 2022 at 08:48 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -33,10 +33,18 @@ USE `userdb`;
 CREATE TABLE `comments` (
   `commentId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
+  `username` varchar(30) NOT NULL,
   `commentText` varchar(140) NOT NULL,
   `postId` int(11) NOT NULL,
   `timeStamp` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`commentId`, `userId`, `username`, `commentText`, `postId`, `timeStamp`) VALUES
+(3, 5, 'newUser', 'dsfsdfsf', 8, '2022-04-26 13:30:44');
 
 -- --------------------------------------------------------
 
@@ -57,7 +65,8 @@ CREATE TABLE `posts` (
 --
 
 INSERT INTO `posts` (`postId`, `userId`, `title`, `postText`, `timeStamp`) VALUES
-(7, 5, 'ligma b', 'jjhklbkbbklbkjh', '2022-04-26 13:14:44');
+(7, 5, 'ligma b', 'jjhklbkbbklbkjh', '2022-04-26 13:14:44'),
+(8, 5, 'New Post', 'fbdfbdfb', '2022-04-26 13:30:04');
 
 -- --------------------------------------------------------
 
@@ -113,13 +122,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `commentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `commentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user`
