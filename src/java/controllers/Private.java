@@ -400,7 +400,7 @@ public class Private extends HttpServlet {
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
                         request.setAttribute("comments", comments);
-                        request.setAttribute("commentUserId", commentUserId);
+                        request.setAttribute("commentUserId", userId);
                     }
                         LinkedHashMap<Integer, Posts> posts = popPosts(user);
                         request.setAttribute("posts", posts);
