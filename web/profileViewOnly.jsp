@@ -17,17 +17,17 @@
         <jsp:include page="header.jsp" />
 
         <div>
-            <h2>${usernameVO}'s Profile</h2>
+            <h2>${otherUser.username}'s Profile</h2>
             <form action="private" method="post">
                 <input type="hidden" name="action" value="updateUser">
                 <label>Username: </label>
-                <input type="text" name="username" value="${user.username}" readonly class="readonly"><br><br>
+                <input type="text" name="username" value="${otherUser.username}" readonly class="readonly"><br><br>
                 <label>Email Address: </label>
-                <input type="text" name="email" value="${user.email}" readonly class="readonly"><br><br>
+                <input type="text" name="email" value="${otherUser.email}" readonly class="readonly"><br><br>
                 <label>Birthday: </label>
-                <input type="date" name="birthday" value="${user.birthday}" readonly class="readonly"><br><br>
+                <input type="date" name="birthday" value="${otherUser.birthday}" readonly class="readonly"><br><br>
             </form><br>
-            <h2>${usernameVO}'s Posts:</h2>
+            <h2>${otherUser.username}'s Posts:</h2>
             <c:forEach var="post" items="${posts}">
                 <h3>${post.value.title}</h3>
                 <p> ${post.value.timeStamp}</p><br>
@@ -54,6 +54,7 @@
                     <input type="hidden" name="action" value="commentAllUserPost">
                     <input type="hidden" name="postId" value="${post.getKey()}">
                     <input type="hidden" name="userName" value="${user.username}">
+                    <input type="hidden" name="usernameVO" value="${usernameVO}">
                     <label>Post a comment:</label><br>
                     <textarea name="allUserCommentText" rows="2" cols="50"></textarea><br>
                     <input type="submit" value="Post Comment">

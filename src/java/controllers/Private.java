@@ -368,7 +368,7 @@ public class Private extends HttpServlet {
                     int userId = 1;
                     Posts commentPost = null;
                     loggedInUser = (String) session.getAttribute("loggedInUser");
-
+                    
                     try {
                         postId = Integer.parseInt(postIdString);
                     } catch (Exception e) {
@@ -400,12 +400,18 @@ public class Private extends HttpServlet {
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
                         request.setAttribute("comments", comments);
+                        request.setAttribute("commentUserId", commentUserId);
                     }
+                        LinkedHashMap<Integer, Posts> posts = popPosts(user);
+                        request.setAttribute("posts", posts);
+                    
+                    url = "/profileViewOnly.jsp";
                     break;
                 }
                 case "deleteProfileComment": {
                     String commentIdString = request.getParameter("commentId");
                     int commentId = -1;
+                    int commentUserId = user.getId();
 
                     try {
                         commentId = Integer.parseInt(commentIdString);
@@ -424,8 +430,14 @@ public class Private extends HttpServlet {
                         request.setAttribute("posts", posts);
                         LinkedHashMap<Integer, Posts> comments = popComments();
                         request.setAttribute("comments", comments);
-                        url = "/profile.jsp";
+                        request.setAttribute("commentUserId", commentUserId);
+                        url = "/profileViewOnly.jsp";
                     }
+                    
+                    LinkedHashMap<Integer, Posts> comments = popComments();
+                    request.setAttribute("comments", comments);
+                    
+                   
 
                     break;
                 }
@@ -446,6 +458,7 @@ public class Private extends HttpServlet {
 
                     int postUserId = userVO.getId();
                     String otherPersonUsername = userVO.getUsername();
+                    session.setAttribute("otherUser", userVO);
                     request.setAttribute("usernameVO", otherPersonUsername);
                     LinkedHashMap<Integer, Posts> posts = new LinkedHashMap();
                     int commentUserId = user.getId();
