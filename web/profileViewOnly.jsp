@@ -29,7 +29,8 @@
             </form><br>
             <h2>${otherUser.username}'s Posts:</h2>
             <c:forEach var="post" items="${posts}">
-                <h3>${post.value.title}</h3>
+                <div id="post">
+                <h2>${post.value.title}</h2>
                 <p> ${post.value.timeStamp}</p><br>
                 <p>${post.value.postText}</p>
 
@@ -41,7 +42,8 @@
                         <p>${comment.value.commentText}</p>
                         <c:if test="${commentUserId == comment.value.userId}">
                             <form action="private" method="post">
-                                <input type="hidden" name="action" value="deleteProfileComment">
+                                <input type="hidden" name="action" value="deleteCommentViewOnly">
+                                <input type="hidden" name="otherUsername" value="${usernameVO}">
                                 <input type="hidden" name="commentId" value="${comment.getKey()}">
                                 <input type="submit" value="Delete Comment">
                             </form>
@@ -59,6 +61,8 @@
                     <textarea name="allUserCommentText" rows="2" cols="50"></textarea><br>
                     <input type="submit" value="Post Comment">
                 </form>
+                </div>
+                <br>
             </c:forEach>
 
             <c:forEach var="error" items="${errors}">
